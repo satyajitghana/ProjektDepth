@@ -97,7 +97,7 @@ class ResUpBlock(nn.Module):
 
 class ResUNeXt(nn.Module):
     def __init__(self):
-        super(ResUNet, self).__init__()
+        super(ResUNeXt, self).__init__()
 
         # Encoder
         # H / 2   ; input = 192x192x6 ; output = 96x96x64   ; skip1 = 192x192x64
