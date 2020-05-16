@@ -2,7 +2,10 @@
 
 ---
 
-Stay tuned for updates
+
+# Architecture
+
+![arch](documentation/ResUNet-V2-transparent.png)
 
 ---
 
