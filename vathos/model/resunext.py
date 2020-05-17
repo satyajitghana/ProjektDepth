@@ -56,6 +56,8 @@ class ResDownBlock(nn.Module):
         out = self.double_conv(input)
         out = out + identity
 
+        del identity
+
         return self.down_sample(out), out
 
 
@@ -91,6 +93,8 @@ class ResUpBlock(nn.Module):
         identity = self.proj_layer(x)
 
         out = self.double_conv(x) + identity
+
+        del identity, upsampled, x
 
         return out
 
@@ -151,6 +155,8 @@ class ResUNeXt(nn.Module):
         # Bridge
         bridge = self.bridge(rd4)
 
+        del rd1, rd2, rd3, rd4
+
         # Depth Decoder
         dru4 = self.d_res_up4(bridge, skip4_out)
         dru3 = self.d_res_up3(dru4, skip3_out)
@@ -159,6 +165,8 @@ class ResUNeXt(nn.Module):
 
         d_out = self.depth_output(dru1)
 
+        del dru4, dru3, dru2, dru1
+
         # Segmentation Decoder
         sru4 = self.s_res_up4(bridge, skip4_out, dru4)
         sru3 = self.s_res_up3(sru4, skip3_out, dru3)
@@ -166,4 +174,9 @@ class ResUNeXt(nn.Module):
         sru1 = self.s_res_up1(sru2, skip1_out, dru1)
 
         s_out = self.segment_output(sru1)
+
+        del sru4, sru3, sru2, sru1
+
+        del bridge
+
         return d_out, s_out

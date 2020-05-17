@@ -117,8 +117,8 @@ class DenseDepth(Dataset):
         '''
         Plots a given sample of the dataset
         '''
-        bg, fg_bg, fg_bg_mask, depth_fg_bg = sample['bg'].permute(1, 2, 0).numpy(
-        ), sample['fg_bg'].permute(1, 2, 0).numpy(), sample['fg_bg_mask'], sample['depth_fg_bg']
+        bg, fg_bg, fg_bg_mask, depth_fg_bg = sample['bg'].permute(1, 2, 0).numpy(), sample['fg_bg'].permute(
+            1, 2, 0).numpy(), sample['fg_bg_mask'][0].numpy(), sample['depth_fg_bg'][0].numpy()
         fig, ax = plt.subplots(2, 2, figsize=(4, 4), sharex=True, sharey=True)
 
         ax[0, 0].imshow(bg)
@@ -132,6 +132,38 @@ class DenseDepth(Dataset):
 
         ax[1, 1].imshow(depth_fg_bg)
         ax[1, 1].axis('off')
+
+        fig.tight_layout()
+
+        plt.show()
+
+    @staticmethod
+    def plot4_batch(batch):
+        '''
+        Plots 4 images for batch
+        '''
+        fig, ax = plt.subplots(4, 4, figsize=(6, 6), sharex=True, sharey=True)
+
+        # set the title
+        for axs, col in zip(ax[0], ['BG', 'FG_BG', 'FG_BG_MASK', 'DEPTH_FG_BG']):
+            axs.set_title(col)
+
+        # plot the first 4 samples from the batch
+        for i in range(4):
+            bg, fg_bg, fg_bg_mask, depth_fg_bg = batch['bg'][i].permute(1, 2, 0).numpy(), batch['fg_bg'][i].permute(
+                1, 2, 0).numpy(), batch['fg_bg_mask'][i][0].numpy(), batch['depth_fg_bg'][i][0].numpy()
+
+            ax[i, 0].imshow(bg)
+            ax[i, 0].axis('off')
+
+            ax[i, 1].imshow(fg_bg)
+            ax[i, 1].axis('off')
+
+            ax[i, 2].imshow(fg_bg_mask)
+            ax[i, 2].axis('off')
+
+            ax[i, 3].imshow(depth_fg_bg)
+            ax[i, 3].axis('off')
 
         fig.tight_layout()
 
