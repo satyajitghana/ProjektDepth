@@ -165,8 +165,6 @@ class ResUNeXt(nn.Module):
 
         d_out = self.depth_output(dru1)
 
-        del dru4, dru3, dru2, dru1
-
         # Segmentation Decoder
         sru4 = self.s_res_up4(bridge, skip4_out, dru4)
         sru3 = self.s_res_up3(sru4, skip3_out, dru3)
@@ -175,6 +173,7 @@ class ResUNeXt(nn.Module):
 
         s_out = self.segment_output(sru1)
 
+        del dru4, dru3, dru2, dru1
         del sru4, sru3, sru2, sru1
 
         del bridge
