@@ -5,7 +5,7 @@
 
 # Architecture
 
-![arch](documentation/ResUNet-V2-transparent.png)
+![arch](documentation/ResUNet-V3-transparent.png)
 
 ---
 
