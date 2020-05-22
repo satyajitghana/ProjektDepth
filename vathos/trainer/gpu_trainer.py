@@ -31,7 +31,7 @@ class GPUTrainer(BaseTrainer):
 
         for batch_idx, data in enumerate(pbar):
             # move the data of the specific dataset to our `device`
-            data = getattr(data_loader, self.config['dataset']).apply_on_batch(
+            data = getattr(data_loader, self.config['data_loader']['type']).apply_on_batch(
                 data,
                 lambda x: x.to(self.device)
             )
