@@ -95,6 +95,11 @@ class DenseDepth(Dataset):
 
         mask_fg_bgimg = Image.open(target_mask)
         mask_fg_bgimg.convert('L')
+        mask_arr = np.array(mask_fg_bgimg)
+        mask_arr[mask_arr >= 150] = 255
+        mask_arr[mask_arr < 150] = 0
+        mask_fg_bgimg = Image.fromarray(mask_arr)
+        # mask_fg_bgimg.convert('L')
 
         depth_fg_bgimg = Image.open(target_depth)
         depth_fg_bgimg.convert('L')
@@ -150,14 +155,17 @@ class DenseDepth(Dataset):
 
         # plot the first 4 samples from the batch
         for i in range(4):
-            bg, fg_bg, fg_bg_mask, depth_fg_bg = batch['bg'][i].permute(1, 2, 0).numpy(), batch['fg_bg'][i].permute(
-                1, 2, 0).numpy(), batch['fg_bg_mask'][i][0].numpy(), batch['depth_fg_bg'][i][0].numpy()
+            bg, fg_bg, fg_bg_mask, depth_fg_bg = batch['bg'][i].permute(1, 2, 0).cpu().numpy(), batch['fg_bg'][i].permute(
+                1, 2, 0).cpu().numpy(), batch['fg_bg_mask'][i][0].cpu().numpy(), batch['depth_fg_bg'][i][0].cpu().numpy()
 
             ax[i, 0].imshow(bg)
             ax[i, 0].axis('off')
 
             ax[i, 1].imshow(fg_bg)
             ax[i, 1].axis('off')
+
+            fg_bg_mask[fg_bg_mask >= 0.9] = 1
+            fg_bg_mask[fg_bg_mask < 0.9] = 0
 
             ax[i, 2].imshow(fg_bg_mask)
             ax[i, 2].axis('off')
@@ -168,3 +176,55 @@ class DenseDepth(Dataset):
         fig.tight_layout()
 
         plt.show()
+
+    @staticmethod
+    def plot_results(batch):
+        '''
+        Plots 4 images for batch's model results
+        '''
+        fig, ax = plt.subplots(4, 6, figsize=(10, 6), sharex=True, sharey=True)
+
+        # set the title
+        for axs, col in zip(ax[0], ['BG', 'FG_BG', 'GT MASK', 'PRED MASK', 'GT DEPTH', 'PRED DEPTH']):
+            axs.set_title(col)
+
+        # plot the first 4 samples from the batch
+        for i in range(4):
+            bg, fg_bg, fg_bg_mask, depth_fg_bg = batch['bg'][i].permute(1, 2, 0).cpu().numpy(), batch['fg_bg'][i].permute(
+                1, 2, 0).cpu().numpy(), batch['fg_bg_mask'][i][0].cpu().numpy(), batch['depth_fg_bg'][i][0].cpu().numpy()
+
+            pred_mask, pred_depth = batch['pred_mask'][i][0].cpu(
+            ).numpy(), batch['pred_depth'][i][0].cpu().numpy()
+            pred_mask[pred_mask >= 0.9] = 1
+            pred_mask[pred_mask < 0.9] = 0
+
+            ax[i, 0].imshow(bg)
+            ax[i, 0].axis('off')
+
+            ax[i, 1].imshow(fg_bg)
+            ax[i, 1].axis('off')
+
+            ax[i, 2].imshow(fg_bg_mask)
+            ax[i, 2].axis('off')
+
+            ax[i, 3].imshow(pred_mask)
+            ax[i, 3].axis('off')
+
+            ax[i, 4].imshow(depth_fg_bg)
+            ax[i, 4].axis('off')
+
+            ax[i, 5].imshow(pred_depth)
+            ax[i, 5].axis('off')
+
+        fig.tight_layout()
+
+        plt.show()
+
+    @staticmethod
+    def apply_on_batch(batch, apply_func):
+        batch['bg'] = apply_func(batch['bg'])
+        batch['fg_bg'] = apply_func(batch['fg_bg'])
+        batch['fg_bg_mask'] = apply_func(batch['fg_bg_mask'])
+        batch['depth_fg_bg'] = apply_func(batch['depth_fg_bg'])
+
+        return batch
