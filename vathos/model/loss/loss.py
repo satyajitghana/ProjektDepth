@@ -1,6 +1,7 @@
 import kornia
 import torch
-import torch.nn
+import torch.nn as nn
+import torch.functional as F
 
 
 class DiceLoss(nn.Module):
