@@ -7,7 +7,7 @@ from types import ModuleType
 import torch
 import torch.nn as nn
 
-from . import setup_logger
+from .logger import setup_logger
 
 logger = setup_logger(__name__)
 

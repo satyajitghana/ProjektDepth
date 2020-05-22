@@ -5,3 +5,4 @@ torchvision
 torchsummary
 albumentations
 kornia
+torch_lr_finder
