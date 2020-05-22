@@ -2,15 +2,16 @@ from .base_trainer import BaseTrainer
 
 import torch
 import os
-import torch_xla
-import torch_xla.core.xla_model as xm
-import torch_xla.distributed.parallel_loader as pl
-import torch_xla.distributed.xla_multiprocessing as xmp
 
 
 class TPUTrainer(BaseTrainer):
     def __init__(self, *args, **kwargs):
+
         super(TPUTrainer, self).__init__(*args, **kwargs)
+        import torch_xla
+        import torch_xla.core.xla_model as xm
+        import torch_xla.distributed.parallel_loader as pl
+        import torch_xla.distributed.xla_multiprocessing as xmp
 
         os.environ['XLA_USE_BF16'] = 1
 
