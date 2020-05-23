@@ -124,3 +124,8 @@ class Runner():
                 vtrainer, 'GPUTrainer', model, loss_fns, optimizer, cfg, train_subset, test_subset, state_dict=state_dict)
         else:
             logger.error(f"Unsupported Device: {cfg['device']}")
+
+    def start_train(self):
+        assert(self.trainer is not None)
+
+        self.trainer.start_train()
