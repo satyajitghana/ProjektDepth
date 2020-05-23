@@ -140,7 +140,7 @@ class DenseDepth(Dataset):
 
         fig.tight_layout()
 
-        plt.show()
+        return fig
 
     @staticmethod
     def plot4_batch(batch):
@@ -175,7 +175,7 @@ class DenseDepth(Dataset):
 
         fig.tight_layout()
 
-        plt.show()
+        return fig
 
     @staticmethod
     def plot_results(batch):
@@ -218,7 +218,7 @@ class DenseDepth(Dataset):
 
         fig.tight_layout()
 
-        plt.show()
+        return fig
 
     @staticmethod
     def apply_on_batch(batch, apply_func):
