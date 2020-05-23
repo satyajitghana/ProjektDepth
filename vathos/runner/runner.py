@@ -21,11 +21,13 @@ class Runner():
 
         # print the super awesome logo
         print(vutils.logo)
+        logger.info('Now simply setup_train and then start_train your model')
 
     def setup_train(self):
 
         cfg = self.config
 
+        logger.info('Config')
         # print the config
         for line in pprint.pformat(cfg).split('\n'):
             logger.info(line)
@@ -118,6 +120,6 @@ class Runner():
 
         if cfg['device'] == 'GPU':
             self.trainer = get_instance_v2(
-                trainer, 'GPUTrainer', model, loss_fns, optimizer, cfg, train_subset, test_subset, state_dict=state_dict)
+                vtrainer, 'GPUTrainer', model, loss_fns, optimizer, cfg, train_subset, test_subset, state_dict=state_dict)
         else:
             logger.error(f"Unsupported Device: {cfg['device']}")
