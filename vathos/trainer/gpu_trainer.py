@@ -1,10 +1,14 @@
 from .base_trainer import BaseTrainer
 import vathos.data_loader as data_loader
+from vathos.utils import setup_logger
 
 import gc
 import torch
 from tqdm.auto import tqdm
 import vathos.model.loss as vloss
+
+
+logger = setup_logger(__name__)
 
 
 class GPUTrainer(BaseTrainer):

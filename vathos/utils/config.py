@@ -41,3 +41,9 @@ def get_instance(module: ModuleType, name: str, config: Dict, *args: Any) -> Any
     ctor_name = config[name]['type']
     logger.info(f'Building: {module.__name__}.{ctor_name}')
     return getattr(module, ctor_name)(*args, **config[name]['args'])
+
+
+def get_instance_v2(module, ctor_name, *args, **kwargs):
+    logger.info(f'Building {module.__name__}.{ctor_name}')
+
+    return getattr(module, ctor_name)(*args, **kwargs)
