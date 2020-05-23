@@ -180,16 +180,17 @@ class DenseDepth(Dataset):
     @staticmethod
     def plot_results(batch):
         '''
-        Plots 4 images for batch's model results
+        Plots 8 images for batch's model results
         '''
-        fig, ax = plt.subplots(4, 6, figsize=(10, 6), sharex=True, sharey=True)
+        fig, ax = plt.subplots(8, 6, figsize=(
+            15, 18), sharex=True, sharey=True)
 
         # set the title
         for axs, col in zip(ax[0], ['BG', 'FG_BG', 'GT MASK', 'PRED MASK', 'GT DEPTH', 'PRED DEPTH']):
             axs.set_title(col)
 
-        # plot the first 4 samples from the batch
-        for i in range(4):
+        # plot the first 8 samples from the batch
+        for i in range(8):
             bg, fg_bg, fg_bg_mask, depth_fg_bg = batch['bg'][i].permute(1, 2, 0).cpu().numpy(), batch['fg_bg'][i].permute(
                 1, 2, 0).cpu().numpy(), batch['fg_bg_mask'][i][0].cpu().numpy(), batch['depth_fg_bg'][i][0].cpu().numpy()
 
