@@ -50,7 +50,8 @@ class Runner():
             target_transform=T.Compose([T.ToTensor()])
         )
 
-        train_subset, test_subset = split_dataset(dataset)
+        train_subset, test_subset = split_dataset(
+            dataset, div_factor=cfg['dataset']['divfactor'])
 
         # check if the train_subset and test_subset indices are present in disk
         subset_file = Path(cfg['dataset']['root']) / 'subset.pt'
