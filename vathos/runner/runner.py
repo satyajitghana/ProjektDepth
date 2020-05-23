@@ -51,7 +51,7 @@ class Runner():
         )
 
         train_subset, test_subset = split_dataset(
-            dataset, div_factor=cfg['dataset']['divfactor'])
+            dataset, div_factor=cfg['dataset']['div_factor'])
 
         # check if the train_subset and test_subset indices are present in disk
         subset_file = Path(cfg['dataset']['root']) / 'subset.pt'
