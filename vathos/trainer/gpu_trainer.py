@@ -37,13 +37,14 @@ class GPUTrainer(BaseTrainer):
 
     def train_epoch(self, epoch):
 
-        logger.info(f'Training Epoch {epoch}')
+        logger.info(f'=> Training Epoch {epoch}')
 
         # clear the cache before training this epoch
         gc.collect()
         torch.cuda.empty_cache()
 
-        pbar = tqdm(self.train_loader, dynamic_ncols=True)
+        # pbar = tqdm(self.train_loader, dynamic_ncols=True)
+        pbar = self.train_loader
 
         # set the model to training mode
         self.model.train()
@@ -89,8 +90,8 @@ class GPUTrainer(BaseTrainer):
             seg_loss += l1.item()
             depth_loss += l2.item()
 
-            pbar.set_description(
-                desc=f'loss={loss.item():.4f} seg_loss={l1.item():.4f} depth_loss={l2.item():.4f} batch_id={batch_idx}')
+            # pbar.set_description(
+            #     desc=f'loss={loss.item():.4f} seg_loss={l1.item():.4f} depth_loss={l2.item():.4f} batch_id={batch_idx}')
 
             self.writer.add_scalar(
                 'BatchLoss/Train/seg_loss', l1.item(), epoch*len(pbar) + batch_idx)
@@ -102,12 +103,15 @@ class GPUTrainer(BaseTrainer):
         miou /= len(pbar)
         mrmse /= len(pbar)
 
+        logger.info(
+            f'seg_loss: {seg_loss}, depth_loss: {depth_loss}, mIOU: {miou}, mRMSE: {mrmse}')
+
         self.writer.flush()
 
         return {'miou': miou, 'mrmse': mrmse, 'seg_loss': seg_loss, 'depth_loss': depth_loss}
 
     def test_epoch(self, epoch):
-        logger.info(f'Testing Epoch {epoch}')
+        logger.info(f'=> Testing Epoch {epoch}')
 
         # clear the cache before testing this epoch
         gc.collect()
@@ -121,7 +125,8 @@ class GPUTrainer(BaseTrainer):
         seg_loss = 0
         depth_loss = 0
 
-        pbar = tqdm(self.test_loader, dynamic_ncols=True)
+        # pbar = tqdm(self.test_loader, dynamic_ncols=True)
+        pbar = self.test_loader
 
         for batch_idx, data in enumerate(pbar):
             # move the data of the specific dataset to our `device`
@@ -143,7 +148,7 @@ class GPUTrainer(BaseTrainer):
                 seg_loss += l1.item()
                 depth_loss += l2.item()
 
-            pbar.set_description(desc=f'testing batch_id={batch_idx}')
+            # pbar.set_description(desc=f'testing batch_id={batch_idx}')
 
         miou /= len(pbar)
         mrmse /= len(pbar)
