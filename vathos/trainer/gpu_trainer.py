@@ -171,6 +171,7 @@ class GPUTrainer(BaseTrainer):
                             for group in self.optimizer.param_groups][0]
 
                 logger.info(f'=> LR was set to {lr_value}')
+                self.writer.add_scalar('LR/lr_value', lr_value, epoch)
 
             # train this epoch
             train_metric = self.train_epoch(epoch)

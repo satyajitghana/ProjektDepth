@@ -54,7 +54,7 @@ class Runner():
             dataset, div_factor=cfg['dataset']['div_factor'])
 
         # check if the train_subset and test_subset indices are present in disk
-        subset_file = Path(cfg['dataset']['root']) / 'subset.pt'
+        subset_file = Path(cfg['chkpt_dir']) / 'subset.pt'
 
         if subset_file.exists():
             # load the subset state
