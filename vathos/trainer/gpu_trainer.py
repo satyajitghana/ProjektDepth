@@ -209,13 +209,13 @@ class GPUTrainer(BaseTrainer):
                 self.best_accuracy['mrmse'] = test_metric['mrmse']
                 self.best_accuracy['miou'] = test_metric['miou']
 
-                logger.info('=> Accuracy improved, saving checkpoint ...')
+                logger.info('=> Accuracy improved, saving best checkpoint ...')
 
                 chkpt_path = Path(self.config['chkpt_dir'])
                 chkpt_path.mkdir(parents=True, exist_ok=True)
 
-                model_checkpoint = chkpt_path / 'model_checkpoint.pt'
-                train_checkpoint = chkpt_path / 'train_checkpoint.pt'
+                model_checkpoint = chkpt_path / 'model_checkpoint_best.pt'
+                train_checkpoint = chkpt_path / 'train_checkpoint_best.pt'
                 torch.save(self.model.state_dict(), model_checkpoint)
 
                 torch.save({
@@ -225,5 +225,22 @@ class GPUTrainer(BaseTrainer):
                     'save_epoch': epoch,
                     'total_epochs': self.epochs
                 }, train_checkpoint)
+
+            logger.info('=> Saving checkpoint ...')
+
+            chkpt_path = Path(self.config['chkpt_dir'])
+            chkpt_path.mkdir(parents=True, exist_ok=True)
+
+            model_checkpoint = chkpt_path / 'model_checkpoint.pt'
+            train_checkpoint = chkpt_path / 'train_checkpoint.pt'
+            torch.save(self.model.state_dict(), model_checkpoint)
+
+            torch.save({
+                'optimizer': self.optimizer.state_dict(),
+                'scheduler': self.lr_scheduler.state_dict(),
+                'best_accuracy': self.best_accuracy,
+                'save_epoch': epoch,
+                'total_epochs': self.epochs
+            }, train_checkpoint)
 
             self.writer.flush()
