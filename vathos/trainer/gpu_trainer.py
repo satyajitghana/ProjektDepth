@@ -6,7 +6,8 @@ import vathos.model.loss as vloss
 import gc
 import torch
 from pathlib import Path
-from tqdm.auto import tqdm
+# from tqdm.auto import tqdm
+from tqdm.notebook import tqdm, trange
 import torch.optim as optim
 import torch.utils as utils
 

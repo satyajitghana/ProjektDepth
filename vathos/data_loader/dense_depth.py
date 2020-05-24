@@ -3,7 +3,8 @@ import os
 from torch.utils.data import Dataset
 import matplotlib.pyplot as plt
 import seaborn as sns
-from tqdm.auto import tqdm
+# from tqdm.auto import tqdm
+from tqdm.notebook import tqdm, trange
 import numpy as np
 from PIL import Image
 import PIL
