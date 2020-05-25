@@ -6,3 +6,5 @@ opencv-python==4.2.0.34
 torch==1.5.0
 torchvision==0.6
 pyyaml
+kornia
+seaborn
