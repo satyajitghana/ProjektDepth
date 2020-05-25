@@ -6,6 +6,12 @@ Colab Link  : `<https://colab.research.google.com/github/satyajitghana/ProjektDe
 
 Now the model was trained on ``96x96`` images, so then later we can perform transfer learning to train on ``192x192`` images
 
+The entire training took about 5.5 hrs, but its actually took more, since there were bugs that i had to patch up and then restart the run.
+
+Albeit the program does checkpoint every epoch and also stores the best accuracy model, every model metric is logged using Tensorboard.
+
+Quite a tiring experience overall 😪😪
+
 LR Range Test
 *************
 
