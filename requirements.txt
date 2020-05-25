@@ -23,10 +23,5 @@ pydocstyle
 
 # docs
 sphinx
-sphinx-gallery
 sphinx_rtd_theme
-sphinxcontrib-bibtex
-nbsphinx
-nbconvert
-notebook
 
