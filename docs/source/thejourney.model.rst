@@ -16,6 +16,21 @@ we found were these
 
 All of them using a variation of Encoder-Decoder architecture
 
+Various Papers were surveyed to find that UNet with Residual connections work best, also multiple encoder-decoder networks can be combined together
+to form a new network.
+
+1. Stacked U-Nets: A No-Frills Approach to Natural Image Segmentation: `<https://arxiv.org/pdf/1804.10343.pdf>`_
+:This inspired me to stack the decoder part of my network to give two outputs
+
+2. Depth Estimation and Semantic Segmentation from a Single RGB Image Using a Hybrid Convolutional Neural Network: `<https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6514714/>`_
+:Various loss functions were inspired from this
+
+3. Road Extraction by Deep Residual U-Net `<https://arxiv.org/abs/1711.10684>`_
+:I referred this to create the ResUNet
+
+4. Transfer Learning for Brain Tumor Segmentation `<https://arxiv.org/abs/1912.12452>`_
+: Brain Tumor Segmentation done using UNet
+
 So we went with that combined with my knowledge that residual networks have proved to be really
 good, and for segmentation a UNet kind of architecture is good, finally we created a custom Residual-UNet
 architecture, with Single Encoder - Double Decoder and Residual Connections between them
