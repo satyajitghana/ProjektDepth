@@ -1,0 +1,10 @@
+Vathos 🐲 - The Journey
+========================
+
+The dataset was created from 100 fg images and 100 bg images
+
+DNN's tried
+
+ResUNet
+
+ResUNeXt

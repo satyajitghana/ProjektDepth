@@ -1,0 +1,463 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>2. The Dataset &mdash; ProjektDepth - vathos 🐲 master documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon-16x16.png"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="3. Loss Functions" href="thejourney.loss_functions.html" />
+    <link rel="prev" title="1. The Model" href="thejourney.model.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ProjektDepth - vathos 🐲
+          
+
+          
+            
+            <img src="_static/logo.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="model.html">vathos.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_loader.html">vathos.data_loader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trainer.html">vathos.trainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runner.html">vathos.runner</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">vathos.utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">The Journey</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="thejourney.html">Vathos 🐲 - The Journey</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="thejourney.model.html">1. The Model</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">2. The Dataset</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#dataset-google-drive-link">Dataset Google Drive link</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#total-size">Total Size</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#dataset-creation">Dataset Creation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#depth-map-creation">Depth Map creation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mean-and-standard-deviation">Mean and Standard Deviation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#dataset-stats">Dataset Stats:</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#dataset-visualization">Dataset Visualization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#bg-images">BG Images</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fg-images">FG Images</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fg-bg-images">FG_BG Images</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fg-bg-mask-images">FG_BG_MASK Images</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#depth-fg-bg-images">Depth_FG_BG Images</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#how-the-dataset-was-created">How the dataset was created</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="thejourney.loss_functions.html">3. Loss Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="thejourney.testing_hparams_timings.html">4. Testing Timings and Hyper Params</a></li>
+<li class="toctree-l2"><a class="reference internal" href="thejourney.run_on_tpu.html">5. Run on TPU !</a></li>
+<li class="toctree-l2"><a class="reference internal" href="thejourney.training_on_smalldataset.html">6. Training on Small Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="thejourney.model_exploration_logs.html">7. Dataset and Model Exploration Log</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ProjektDepth - vathos 🐲</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="thejourney.html">Vathos 🐲 - The Journey</a> &raquo;</li>
+        
+      <li>2. The Dataset</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/thejourney.dataset.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="the-dataset">
+<h1>2. The Dataset<a class="headerlink" href="#the-dataset" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="dataset-google-drive-link">
+<h2>Dataset Google Drive link<a class="headerlink" href="#dataset-google-drive-link" title="Permalink to this headline">¶</a></h2>
+<p>https://drive.google.com/open?id=10MBvlf6pMB78o-bWNe7tVlqNaIP3DtKQ</p>
+<p>.<code class="docutils literal notranslate"><span class="pre">zip</span></code>, no compression algorithm was used, <code class="docutils literal notranslate"><span class="pre">ZIP_STORE</span></code> option was used</p>
+<div class="section" id="total-size">
+<h3>Total Size<a class="headerlink" href="#total-size" title="Permalink to this headline">¶</a></h3>
+<p><img alt="enter image description here" src="https://github.com/satyajitghana/TSAI-DeepVision-EVA4.0/blob/master/14_RCNN/images/dataset-size.png?raw=true" /></p>
+</div>
+</div>
+<div class="section" id="dataset-creation">
+<h2>Dataset Creation<a class="headerlink" href="#dataset-creation" title="Permalink to this headline">¶</a></h2>
+<p>Github Link: <a class="reference external" href="https://github.com/satyajitghana/TSAI-DeepVision-EVA4.0/blob/master/14_RCNN/01_DenseDepth_DatasetCreation.ipynb">https://github.com/satyajitghana/TSAI-DeepVision-EVA4.0/blob/master/14_RCNN/01_DenseDepth_DatasetCreation.ipynb</a></p>
+<p><a class="reference external" href="https://github.com/satyajitghana/TSAI-DeepVision-EVA4.0/blob/master/14_RCNN/01_02_DenseDepth_DatasetCreation.ipynb">https://github.com/satyajitghana/TSAI-DeepVision-EVA4.0/blob/master/14_RCNN/01_02_DenseDepth_DatasetCreation.ipynb</a></p>
+<p>Colab Link: https://colab.research.google.com/github/satyajitghana/TSAI-DeepVision-EVA4.0/blob/master/14_RCNN/01_DenseDepth_DatasetCreation.ipynb</p>
+<p><a class="reference external" href="https://colab.research.google.com/github/satyajitghana/TSAI-DeepVision-EVA4.0/blob/master/14_RCNN/01_02_DenseDepth_DatasetCreation.ipynb">https://colab.research.google.com/github/satyajitghana/TSAI-DeepVision-EVA4.0/blob/master/14_RCNN/01_02_DenseDepth_DatasetCreation.ipynb</a></p>
+</div>
+<div class="section" id="depth-map-creation">
+<h2>Depth Map creation<a class="headerlink" href="#depth-map-creation" title="Permalink to this headline">¶</a></h2>
+<p>Colab link: <a class="reference external" href="https://colab.research.google.com/github/satyajitghana/TSAI-DeepVision-EVA4.0/blob/master/14_RCNN/02_DepthModel_DepthMap.ipynb">https://colab.research.google.com/github/satyajitghana/TSAI-DeepVision-EVA4.0/blob/master/14_RCNN/02_DepthModel_DepthMap.ipynb</a></p>
+</div>
+<div class="section" id="mean-and-standard-deviation">
+<h2>Mean and Standard Deviation<a class="headerlink" href="#mean-and-standard-deviation" title="Permalink to this headline">¶</a></h2>
+<p>Github Link: <a class="reference external" href="https://github.com/satyajitghana/TSAI-DeepVision-EVA4.0/blob/master/14_RCNN/03_DepthModel_MeanStd.ipynb">https://github.com/satyajitghana/TSAI-DeepVision-EVA4.0/blob/master/14_RCNN/03_DepthModel_MeanStd.ipynb</a></p>
+<p>Colab Link: https://colab.research.google.com/github/satyajitghana/TSAI-DeepVision-EVA4.0/blob/master/14_RCNN/03_DepthModel_MeanStd.ipynb</p>
+<div class="section" id="dataset-stats">
+<h3>Dataset Stats:<a class="headerlink" href="#dataset-stats" title="Permalink to this headline">¶</a></h3>
+<ol class="simple">
+<li><p>BG Images</p></li>
+</ol>
+<ul class="simple">
+<li><p>Mean:<code class="docutils literal notranslate"><span class="pre">['0.573435604572296',</span> <span class="pre">'0.520844697952271',</span> <span class="pre">'0.457784473896027']</span></code></p></li>
+<li><p>Std: <code class="docutils literal notranslate"><span class="pre">['0.207058250904083',</span> <span class="pre">'0.208138316869736',</span> <span class="pre">'0.215291306376457']</span></code></p></li>
+</ul>
+<ol class="simple">
+<li><p>FG_BG Images</p></li>
+</ol>
+<ul class="simple">
+<li><p>Mean: <code class="docutils literal notranslate"><span class="pre">['0.568499565124512',</span> <span class="pre">'0.512103974819183',</span> <span class="pre">'0.452332496643066']</span></code></p></li>
+<li><p>Std:  <code class="docutils literal notranslate"><span class="pre">['0.211068645119667',</span> <span class="pre">'0.211040720343590',</span> <span class="pre">'0.216081097722054']</span></code></p></li>
+</ul>
+<ol class="simple">
+<li><p>FG_BG_MASK Images</p></li>
+</ol>
+<ul class="simple">
+<li><p>Mean: <code class="docutils literal notranslate"><span class="pre">['0.062296919524670',</span> <span class="pre">'0.062296919524670',</span> <span class="pre">'0.062296919524670']</span></code></p></li>
+<li><p>Std: <code class="docutils literal notranslate"><span class="pre">['0.227044790983200',</span> <span class="pre">'0.227044790983200',</span> <span class="pre">'0.227044790983200']</span></code></p></li>
+</ul>
+<ol class="simple">
+<li><p>DEPTH_FG_BG</p></li>
+</ol>
+<ul class="simple">
+<li><p>Mean: <code class="docutils literal notranslate"><span class="pre">['0.302973538637161',</span> <span class="pre">'0.302973538637161',</span> <span class="pre">'0.302973538637161']</span></code></p></li>
+<li><p>Std: <code class="docutils literal notranslate"><span class="pre">['0.101284727454185',</span> <span class="pre">'0.101284727454185',</span> <span class="pre">'0.101284727454185']</span></code></p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="dataset-visualization">
+<h2>Dataset Visualization<a class="headerlink" href="#dataset-visualization" title="Permalink to this headline">¶</a></h2>
+<p>Github Link: <a class="reference external" href="https://github.com/satyajitghana/TSAI-DeepVision-EVA4.0/blob/master/14_RCNN/04_DepthModel_DataViz.ipynb">https://github.com/satyajitghana/TSAI-DeepVision-EVA4.0/blob/master/14_RCNN/04_DepthModel_DataViz.ipynb</a></p>
+<p>Colab Link: https://colab.research.google.com/github/satyajitghana/TSAI-DeepVision-EVA4.0/blob/master/14_RCNN/04_DepthModel_DataViz.ipynb</p>
+<p>Note: To view them larger, <code class="docutils literal notranslate"><span class="pre">right</span> <span class="pre">click</span> <span class="pre">-&gt;</span> <span class="pre">Open</span> <span class="pre">image</span> <span class="pre">in</span> <span class="pre">new</span> <span class="pre">tab</span></code></p>
+<div class="section" id="bg-images">
+<h3>BG Images<a class="headerlink" href="#bg-images" title="Permalink to this headline">¶</a></h3>
+<p><img alt="enter image description here" src="https://github.com/satyajitghana/TSAI-DeepVision-EVA4.0/blob/master/14_RCNN/images/bg.png?raw=true" /></p>
+</div>
+<div class="section" id="fg-images">
+<h3>FG Images<a class="headerlink" href="#fg-images" title="Permalink to this headline">¶</a></h3>
+<p><img alt="enter image description here" src="https://github.com/satyajitghana/TSAI-DeepVision-EVA4.0/blob/master/14_RCNN/images/fg.png?raw=true" /></p>
+</div>
+<div class="section" id="fg-bg-images">
+<h3>FG_BG Images<a class="headerlink" href="#fg-bg-images" title="Permalink to this headline">¶</a></h3>
+<p><img alt="enter image description here" src="https://github.com/satyajitghana/TSAI-DeepVision-EVA4.0/blob/master/14_RCNN/images/fg_bg.png?raw=true" /></p>
+</div>
+<div class="section" id="fg-bg-mask-images">
+<h3>FG_BG_MASK Images<a class="headerlink" href="#fg-bg-mask-images" title="Permalink to this headline">¶</a></h3>
+<p><img alt="enter image description here" src="https://github.com/satyajitghana/TSAI-DeepVision-EVA4.0/blob/master/14_RCNN/images/fg_bg_mask.png?raw=true" /></p>
+</div>
+<div class="section" id="depth-fg-bg-images">
+<h3>Depth_FG_BG Images<a class="headerlink" href="#depth-fg-bg-images" title="Permalink to this headline">¶</a></h3>
+<p><img alt="enter image description here" src="https://github.com/satyajitghana/TSAI-DeepVision-EVA4.0/blob/master/14_RCNN/images/depth_fg_bg.png?raw=true" /></p>
+</div>
+</div>
+<div class="section" id="how-the-dataset-was-created">
+<h2>How the dataset was created<a class="headerlink" href="#how-the-dataset-was-created" title="Permalink to this headline">¶</a></h2>
+<p>Since we need to apply the foreground images on background images and also creating a mask of the fg images, i used transparent background png images, a image crawler was run on Bing to gather people, animals, dogs, cats, bears, goats, deer, cow and human images for the fg, mall interior, interior and indoor images were searched and crawled.</p>
+<p>Now we converted the fg png images to mask by filling the transparent part with white and rest image with black using this code,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">img</span>  <span class="o">=</span>  <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">fg_images</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>  <span class="n">cv2</span><span class="o">.</span><span class="n">IMREAD_UNCHANGED</span><span class="p">)</span>
+<span class="n">ret</span><span class="p">,</span>  <span class="n">mask</span>  <span class="o">=</span>  <span class="n">cv2</span><span class="o">.</span><span class="n">threshold</span><span class="p">(</span><span class="n">im</span><span class="p">[:,</span>  <span class="p">:,</span>  <span class="mi">3</span><span class="p">],</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">255</span><span class="p">,</span>  <span class="n">cv2</span><span class="o">.</span><span class="n">THRESH_BINARY</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For the BG Images, they were resized and cropped to <code class="docutils literal notranslate"><span class="pre">200x200</span></code>  using this,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span>  <span class="nf">crop_center</span><span class="p">(</span><span class="n">pil_img</span><span class="p">):</span>
+	<span class="n">img_width</span><span class="p">,</span>  <span class="n">img_height</span>  <span class="o">=</span>  <span class="n">pil_img</span><span class="o">.</span><span class="n">size</span>
+	<span class="n">crop_dim</span>  <span class="o">=</span>  <span class="n">img_width</span>  <span class="k">if</span>  <span class="n">img_width</span>  <span class="o">&lt;</span>  <span class="n">img_height</span>  <span class="k">else</span>  <span class="n">img_height</span>
+	<span class="n">crop_width</span>  <span class="o">=</span>  <span class="n">crop_height</span>  <span class="o">=</span>  <span class="n">crop_dim</span>
+
+	<span class="k">return</span>  <span class="n">pil_img</span><span class="o">.</span><span class="n">crop</span><span class="p">(((</span><span class="n">img_width</span>  <span class="o">-</span>  <span class="n">crop_width</span><span class="p">)</span>  <span class="o">//</span>  <span class="mi">2</span><span class="p">,</span>  <span class="p">(</span><span class="n">img_height</span>  <span class="o">-</span>  <span class="n">crop_height</span><span class="p">)</span>  <span class="o">//</span>  <span class="mi">2</span><span class="p">,</span>  <span class="p">(</span><span class="n">img_width</span>  <span class="o">+</span>  <span class="n">crop_width</span><span class="p">)</span>  <span class="o">//</span>  <span class="mi">2</span><span class="p">,</span>  <span class="p">(</span><span class="n">img_height</span>  <span class="o">+</span>  <span class="n">crop_height</span><span class="p">)</span>  <span class="o">//</span>  <span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Once we’ve process this, we’ll have <code class="docutils literal notranslate"><span class="pre">fg</span> <span class="pre">(100)</span></code>, <code class="docutils literal notranslate"><span class="pre">bg</span> <span class="pre">(100)</span></code>, <code class="docutils literal notranslate"><span class="pre">fg_mask</span> <span class="pre">(100)</span></code>, now we need to create the fg_bg images</p>
+<p>Now to create the fg_bg images and also the fg_bg_mask images, we will place the fg images on top of bg images at random positions, 10 times, and do this with flipped fg images, in total we will have
+<code class="docutils literal notranslate"><span class="pre">fg</span> <span class="pre">(100)</span> <span class="pre">x</span> <span class="pre">bg</span> <span class="pre">(100)</span> <span class="pre">x</span> <span class="pre">flip</span> <span class="pre">(2)</span> <span class="pre">x</span> <span class="pre">place_random</span> <span class="pre">(10)</span> <span class="pre">=</span> <span class="pre">fg_bg</span> <span class="pre">(400,000)</span> <span class="pre">+</span> <span class="pre">fg_bg_mask</span> <span class="pre">(400,</span> <span class="pre">000)</span></code></p>
+<p>Code to do this,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">bidx</span><span class="p">,</span> <span class="n">bg_image</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tqdm</span><span class="p">(</span><span class="n">bgc_images</span><span class="p">)):</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">bidx</span> <span class="o">&lt;</span> <span class="n">last_idx</span><span class="p">):</span>
+        <span class="k">continue</span>
+
+	<span class="n">Path</span><span class="p">(</span><span class="n">f</span> <span class="s1">&#39;depth_dataset_cleaned/labels/&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+	<span class="n">label_info</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">f</span> <span class="s2">&quot;depth_dataset_cleaned/labels/bg_</span><span class="si">{bidx:03d}</span><span class="s2">_label_info.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;w+&quot;</span><span class="p">)</span>
+
+	<span class="n">idx</span> <span class="o">=</span> <span class="mi">4000</span> <span class="o">*</span> <span class="n">bidx</span>
+
+	<span class="nb">print</span><span class="p">(</span><span class="n">f</span> <span class="s1">&#39;Processing BG </span><span class="si">{bidx}</span><span class="s1">&#39;</span><span class="p">)</span>
+	<span class="n">Path</span><span class="p">(</span><span class="n">f</span> <span class="s1">&#39;depth_dataset_cleaned/fg_bg/bg_</span><span class="si">{bidx:03d}</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+	<span class="n">Path</span><span class="p">(</span><span class="n">f</span> <span class="s1">&#39;depth_dataset_cleaned/fg_bg_mask/bg_</span><span class="si">{bidx:03d}</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+
+	<span class="k">for</span> <span class="n">fidx</span><span class="p">,</span> <span class="n">fg_image</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tqdm</span><span class="p">(</span><span class="n">fgc_images</span><span class="p">)):</span> <span class="c1">#do the add fg to bg 20 times</span>
+	    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">):</span> <span class="c1">#do this twice, one with flip once without</span>
+	    <span class="k">for</span> <span class="n">should_flip</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">]:</span>
+	    <span class="n">background</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">bg_image</span><span class="p">)</span>
+	<span class="n">foreground</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">fg_image</span><span class="p">)</span>
+	<span class="n">fg_mask</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">fgc_mask_images</span><span class="p">[</span><span class="n">fidx</span><span class="p">])</span>
+
+	<span class="k">if</span> <span class="n">should_flip</span><span class="p">:</span>
+	    <span class="n">foreground</span> <span class="o">=</span> <span class="n">foreground</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">FLIP_LEFT_RIGHT</span><span class="p">)</span>
+	<span class="n">fg_mask</span> <span class="o">=</span> <span class="n">fg_mask</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">FLIP_LEFT_RIGHT</span><span class="p">)</span>
+
+	<span class="n">b_width</span><span class="p">,</span> <span class="n">b_height</span> <span class="o">=</span> <span class="n">background</span><span class="o">.</span><span class="n">size</span>
+	<span class="n">f_width</span><span class="p">,</span> <span class="n">f_height</span> <span class="o">=</span> <span class="n">foreground</span><span class="o">.</span><span class="n">size</span>
+	<span class="n">max_y</span> <span class="o">=</span> <span class="n">b_height</span> <span class="o">-</span> <span class="n">f_height</span>
+	<span class="n">max_x</span> <span class="o">=</span> <span class="n">b_width</span> <span class="o">-</span> <span class="n">f_width</span>
+	<span class="n">pos_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">low</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">high</span> <span class="o">=</span> <span class="n">max_x</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+	<span class="n">pos_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">low</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">high</span> <span class="o">=</span> <span class="n">max_y</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+	<span class="n">background</span><span class="o">.</span><span class="n">paste</span><span class="p">(</span><span class="n">foreground</span><span class="p">,</span> <span class="p">(</span><span class="n">pos_x</span><span class="p">,</span> <span class="n">pos_y</span><span class="p">),</span> <span class="n">foreground</span><span class="p">)</span>
+
+	<span class="n">mask_bg</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;L&#39;</span><span class="p">,</span> <span class="n">background</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+
+	<span class="n">fg_mask</span> <span class="o">=</span> <span class="n">fg_mask</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;L&#39;</span><span class="p">)</span>
+	<span class="n">mask_bg</span><span class="o">.</span><span class="n">paste</span><span class="p">(</span><span class="n">fg_mask</span><span class="p">,</span> <span class="p">(</span><span class="n">pos_x</span><span class="p">,</span> <span class="n">pos_y</span><span class="p">),</span> <span class="n">fg_mask</span><span class="p">)</span>
+
+	<span class="n">background</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">f</span> <span class="s1">&#39;depth_dataset_cleaned/fg_bg/bg_</span><span class="si">{bidx:03d}</span><span class="s1">/fg_</span><span class="si">{fidx:03d}</span><span class="s1">_bg_</span><span class="si">{bidx:03d}</span><span class="s1">_</span><span class="si">{idx:06d}</span><span class="s1">.jpg&#39;</span><span class="p">,</span> <span class="n">optimize</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">quality</span> <span class="o">=</span> <span class="mi">30</span><span class="p">)</span>
+	<span class="n">mask_bg</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">f</span> <span class="s1">&#39;depth_dataset_cleaned/fg_bg_mask/bg_</span><span class="si">{bidx:03d}</span><span class="s1">/fg_</span><span class="si">{fidx:03d}</span><span class="s1">_bg_</span><span class="si">{bidx:03d}</span><span class="s1">_mask_</span><span class="si">{idx:06d}</span><span class="s1">.jpg&#39;</span><span class="p">,</span> <span class="n">optimize</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">quality</span> <span class="o">=</span> <span class="mi">30</span><span class="p">)</span>
+	<span class="n">label_info</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">f</span> <span class="s1">&#39;fg_bg/bg_</span><span class="si">{bidx:03d}</span><span class="s1">/fg_</span><span class="si">{fidx:03d}</span><span class="s1">_bg_</span><span class="si">{bidx:03d}</span><span class="s1">_</span><span class="si">{idx:06d}</span><span class="s1">.jpg</span><span class="se">\t</span><span class="s1">fg_bg_mask/bg_</span><span class="si">{bidx:03d}</span><span class="s1">/fg_</span><span class="si">{fidx:03d}</span><span class="s1">_bg_</span><span class="si">{bidx:03d}</span><span class="s1">_mask_</span><span class="si">{idx:06d}</span><span class="s1">.jpg</span><span class="se">\t</span><span class="si">{pos_x}</span><span class="se">\t</span><span class="si">{pos_y}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+	<span class="n">idx</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span>
+
+	<span class="n">label_info</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+	<span class="n">last_idx</span> <span class="o">=</span> <span class="n">bidx</span>
+</pre></div>
+</div>
+<p>For efficiency i wrote the generated file to .zip file, why was this done though ?</p>
+<p><a class="reference external" href="https://medium.com/&#64;satyajitghana7/working-with-huge-datasets-800k-files-in-google-colab-and-google-drive-bcb175c79477">https://medium.com/&#64;satyajitghana7/working-with-huge-datasets-800k-files-in-google-colab-and-google-drive-bcb175c79477</a></p>
+<p>Once this was done, we need to create the depth map, by running the DenseDepth Model on our fg_bg images, this was done by taking batches of 1000, since otherwise we had memory bottleneck issues, moreover i had to manually use the python’s garbage collector to make sure we free the memory after every batch</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">run_processing</span><span class="p">(</span><span class="n">fr</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">to</span> <span class="o">=</span> <span class="mi">10</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">f</span> <span class="s1">&#39;running process from </span><span class="si">{fr}</span><span class="s1">(inclusive) to </span><span class="si">{to}</span><span class="s1">(exclusive) BGs&#39;</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">bdx</span><span class="p">,</span> <span class="n">b_files</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tqdm</span><span class="p">(</span><span class="n">grouped_files</span><span class="p">[</span><span class="n">fr</span><span class="p">:</span> <span class="n">to</span><span class="p">])):</span>
+
+	    <span class="nb">print</span><span class="p">(</span><span class="n">f</span> <span class="s1">&#39;Processing for BG {fr + bdx}&#39;</span><span class="p">)</span>
+
+	<span class="n">out_zip</span> <span class="o">=</span> <span class="n">ZipFile</span><span class="p">(</span><span class="s1">&#39;depth_fg_bg.zip&#39;</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">compression</span> <span class="o">=</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZIP_STORED</span><span class="p">)</span>
+
+	<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">1000</span>
+	<span class="n">batch_idx</span> <span class="o">=</span> <span class="mi">0</span>
+	<span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">make_batch</span><span class="p">(</span><span class="n">b_files</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">):</span>
+	    <span class="n">images</span> <span class="o">=</span> <span class="p">[]</span>
+	<span class="nb">print</span><span class="p">(</span><span class="n">f</span> <span class="s1">&#39;Processing Batch </span><span class="si">{batch_idx}</span><span class="s1">&#39;</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">b_file</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tqdm</span><span class="p">(</span><span class="n">batch</span><span class="p">)):</span>
+	    <span class="n">imgdata</span> <span class="o">=</span> <span class="n">fg_bg_zip</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">b_file</span><span class="p">)</span>
+	<span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">imgdata</span><span class="p">))</span>
+	<span class="n">img</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="mi">640</span><span class="p">,</span> <span class="mi">480</span><span class="p">))</span>
+	<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="nb">float</span><span class="p">)</span> <span class="o">/</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+	<span class="n">images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+	<span class="n">images</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+	<span class="nb">print</span><span class="p">(</span><span class="n">f</span> <span class="s1">&#39;Running prediction for BG {fr + bdx} Batch </span><span class="si">{batch_idx}</span><span class="s1">&#39;</span><span class="p">)</span>
+	<span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+	<span class="n">output</span> <span class="o">=</span> <span class="n">predict</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">images</span><span class="p">)</span>
+	<span class="n">outputs</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+	<span class="n">t2</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+	<span class="nb">print</span><span class="p">(</span><span class="n">f</span> <span class="s1">&#39;Prediction done took {(t2-t1):.5f} s&#39;</span><span class="p">)</span>
+
+	<span class="c1"># resize the outputs to `200x200` and extract channel 0</span>
+	<span class="n">outputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">resize</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">))[:</span> <span class="p">,:</span> <span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+	    <span class="k">for</span> <span class="n">output</span> <span class="ow">in</span> <span class="n">outputs</span>
+	<span class="p">]</span>
+
+	<span class="c1"># create a temporary directory to save the png outputs of current bg directory</span>
+	<span class="n">Path</span><span class="p">(</span><span class="n">f</span> <span class="s1">&#39;temp_b&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+
+	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Saving to Zip File&#39;</span><span class="p">)</span><span class="c1"># for every output, save the output by appending mask to it</span>
+	<span class="k">for</span> <span class="n">odx</span><span class="p">,</span> <span class="n">output</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tqdm</span><span class="p">(</span><span class="n">outputs</span><span class="p">)):</span>
+	    <span class="n">_</span><span class="p">,</span> <span class="n">parent_f</span><span class="p">,</span> <span class="n">f_name</span> <span class="o">=</span> <span class="n">b_files</span><span class="p">[</span><span class="n">batch_idx</span> <span class="o">*</span> <span class="n">batch_size</span> <span class="o">+</span> <span class="n">odx</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)</span>
+	<span class="n">f_name</span> <span class="o">=</span> <span class="n">f_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+	<span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">output</span> <span class="o">*</span> <span class="mi">255</span><span class="p">)</span>
+	<span class="n">img</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;L&#39;</span><span class="p">)</span>
+	<span class="n">img</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">f</span> <span class="s1">&#39;temp_b/temp.png&#39;</span><span class="p">)</span>
+
+	<span class="n">out_zip</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;temp_b/temp.png&#39;</span><span class="p">,</span> <span class="n">f</span> <span class="s1">&#39;mask_fg_bg/</span><span class="si">{parent_f}</span><span class="s1">/mask_</span><span class="si">{f_name}</span><span class="s1">.png&#39;</span><span class="p">)</span>
+
+	<span class="c1"># cleanup files</span>
+	<span class="k">del</span> <span class="n">output</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">images</span>
+
+	<span class="c1"># garbage collect</span>
+	<span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+
+	<span class="n">batch_idx</span> <span class="o">=</span> <span class="n">batch_idx</span> <span class="o">+</span> <span class="mi">1</span>
+
+	<span class="n">out_zip</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="thejourney.loss_functions.html" class="btn btn-neutral float-right" title="3. Loss Functions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="thejourney.model.html" class="btn btn-neutral float-left" title="1. The Model" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Satyajit Ghana
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

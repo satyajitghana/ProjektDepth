@@ -1,0 +1,444 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>3. Loss Functions &mdash; ProjektDepth - vathos 🐲 master documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon-16x16.png"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="4. Testing Timings and Hyper Params" href="thejourney.testing_hparams_timings.html" />
+    <link rel="prev" title="2. The Dataset" href="thejourney.dataset.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ProjektDepth - vathos 🐲
+          
+
+          
+            
+            <img src="_static/logo.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="model.html">vathos.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_loader.html">vathos.data_loader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trainer.html">vathos.trainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runner.html">vathos.runner</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">vathos.utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">The Journey</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="thejourney.html">Vathos 🐲 - The Journey</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="thejourney.model.html">1. The Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="thejourney.dataset.html">2. The Dataset</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">3. Loss Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#playing-with-loss-functions">Playing with Loss Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="thejourney.testing_hparams_timings.html">4. Testing Timings and Hyper Params</a></li>
+<li class="toctree-l2"><a class="reference internal" href="thejourney.run_on_tpu.html">5. Run on TPU !</a></li>
+<li class="toctree-l2"><a class="reference internal" href="thejourney.training_on_smalldataset.html">6. Training on Small Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="thejourney.model_exploration_logs.html">7. Dataset and Model Exploration Log</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ProjektDepth - vathos 🐲</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="thejourney.html">Vathos 🐲 - The Journey</a> &raquo;</li>
+        
+      <li>3. Loss Functions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/thejourney.loss_functions.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="loss-functions">
+<h1>3. Loss Functions<a class="headerlink" href="#loss-functions" title="Permalink to this headline">¶</a></h1>
+<p>Segmentation Loss Functions:</p>
+<ul class="simple">
+<li><p>BCEWithLogits</p></li>
+<li><p>DiceLoss</p></li>
+<li><p>TverskyLoss</p></li>
+</ul>
+<p>Depth Loss Functions:</p>
+<ul class="simple">
+<li><p>BerHu</p></li>
+<li><p>GradLoss</p></li>
+<li><p>BCEWithLogits</p></li>
+</ul>
+<p>Various combinations of the above losses were tried with 1/16th of the dataset</p>
+<p>A Small experiment was done to check if 30M params is really required or no, we found that
+15M params model performed similar to 30M, so the higher param model was scraped</p>
+<p><strong>With 30M Params:</strong></p>
+<img alt="_images/low-param.png" src="_images/low-param.png" />
+<p><strong>With 15M Params:</strong></p>
+<img alt="_images/high-param.png" src="_images/high-param.png" />
+<div class="section" id="playing-with-loss-functions">
+<h2>Playing with Loss Functions<a class="headerlink" href="#playing-with-loss-functions" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-given docutils align-default" id="id1">
+<caption><span class="caption-text">Loss Functions Comparison</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Seg Loss Funcion</p></th>
+<th class="head"><p>Depth Loss Function</p></th>
+<th class="head"><p>mIOU</p></th>
+<th class="head"><p>mRMSE</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>BCE</p></td>
+<td><p>BCE</p></td>
+<td><p>0.1278</p></td>
+<td><p>0.1149</p></td>
+</tr>
+<tr class="row-odd"><td><p>Dice</p></td>
+<td><p>BCE</p></td>
+<td><p>0.4515</p></td>
+<td><p>0.0858</p></td>
+</tr>
+<tr class="row-even"><td><p>Tversky</p></td>
+<td><p>BCE</p></td>
+<td><p>0.3221</p></td>
+<td><p>0.1018</p></td>
+</tr>
+<tr class="row-odd"><td><p>BCEDice</p></td>
+<td><p>BCE</p></td>
+<td><p>0.4578</p></td>
+<td><p>0.0993</p></td>
+</tr>
+<tr class="row-even"><td><p>BCETversky</p></td>
+<td><p>BCE</p></td>
+<td><p>0.3831</p></td>
+<td><p>0.0936</p></td>
+</tr>
+<tr class="row-odd"><td><p>BCEDice</p></td>
+<td><p>BerHu</p></td>
+<td><p>0.4214</p></td>
+<td><p>0.2882</p></td>
+</tr>
+<tr class="row-even"><td><p>BCEDice</p></td>
+<td><p>RMSE</p></td>
+<td><p>0.4366</p></td>
+<td><p>0.0774</p></td>
+</tr>
+<tr class="row-odd"><td><p>BCEDice</p></td>
+<td><p>Grad</p></td>
+<td><p>0.4542</p></td>
+<td><p>0.1795</p></td>
+</tr>
+<tr class="row-even"><td><p>BCEDice</p></td>
+<td><p>SSIM</p></td>
+<td><p>0.4413</p></td>
+<td><p>0.1304</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>mIOU: higher is better</p></li>
+<li><p>mRMSE: lower is better</p></li>
+</ul>
+</div>
+<p><strong>1. seg_loss = BCEWithLogits, depth_loss = BCEWithLogits</strong></p>
+<div class="figure align-default" id="id2">
+<img alt="_images/bce_bce.png" src="_images/bce_bce.png" />
+<p class="caption"><span class="caption-text">bce_bce</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+<div class="legend">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mIOU : 0.12789911031723022
+mRMSE : 0.11494194716215134
+total time : 196.1347 s
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>2. seg_loss = DiceLoss, depth_loss = BCEWithLogits</strong></p>
+<div class="figure align-default" id="id3">
+<img alt="_images/dice_bce.png" src="_images/dice_bce.png" />
+<p class="caption"><span class="caption-text">dice_bce</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+<div class="legend">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mIOU : 0.4515075087547302
+mRMSE : 0.08582810312509537
+total time : 193.0364 s
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>3. seg_loss = TverskyLoss, depth_loss = BCEWithLogits</strong></p>
+<div class="figure align-default" id="id4">
+<img alt="_images/tversky_bce.png" src="_images/tversky_bce.png" />
+<p class="caption"><span class="caption-text">tversky_bce</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+<div class="legend">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mIOU : 0.32213953137397766
+mRMSE : 0.10182604193687439
+total time : 193.5620 s
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>4. seg_loss = BCEDiceLoss, depth_loss = BCEWithLogits</strong></p>
+<div class="figure align-default" id="id5">
+<img alt="_images/bcedice_bce.png" src="_images/bcedice_bce.png" />
+<p class="caption"><span class="caption-text">bcedice_bce</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+<div class="legend">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mIOU : 0.4578476846218109
+mRMSE : 0.09939917922019958
+total time : 191.8000 s
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>5. seg_loss = BCETverskyLoss, depth_loss = BCEWithLogits</strong></p>
+<div class="figure align-default" id="id6">
+<img alt="_images/bcetversky_bce.png" src="_images/bcetversky_bce.png" />
+<p class="caption"><span class="caption-text">bcetversky_bce</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+<div class="legend">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mIOU : 0.3831656873226166
+mRMSE : 0.0936645045876503
+total time : 192.6121 s
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>6. seg_loss = BCEDiceLoss, depth_loss = BCEWithLogits</strong></p>
+<div class="figure align-default" id="id7">
+<img alt="_images/bcedice_bce_depth.png" src="_images/bcedice_bce_depth.png" />
+<p class="caption"><span class="caption-text">bcedice_bce</span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
+<div class="legend">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mIOU : 0.4485453963279724
+mRMSE : 0.12491746991872787
+total time : 193.3488 s
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>7. seg_loss = BCEDiceLoss, depth_loss = BerHuLoss</strong></p>
+<div class="figure align-default" id="id8">
+<img alt="_images/bcedice_berhu.png" src="_images/bcedice_berhu.png" />
+<p class="caption"><span class="caption-text">bcedice_berhu</span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
+<div class="legend">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mIOU : 0.42147812247276306
+mRMSE : 0.2882708013057709
+total time : 193.7522 s
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>8. seg_loss = BCEDiceLoss, depth_loss = RMSELoss</strong></p>
+<div class="figure align-default" id="id9">
+<img alt="_images/bcedice_rmse.png" src="_images/bcedice_rmse.png" />
+<p class="caption"><span class="caption-text">bcedice_rmse</span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
+<div class="legend">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mIOU : 0.4366089999675751
+mRMSE : 0.07745874673128128
+total time : 180.7616 s
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>9. seg_loss = BCEDiceLoss, depth_loss = GradLoss</strong></p>
+<div class="figure align-default" id="id10">
+<img alt="_images/bcedice_grad.png" src="_images/bcedice_grad.png" />
+<p class="caption"><span class="caption-text">bcedice_grad</span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
+<div class="legend">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mIOU : 0.4542521834373474
+mRMSE : 0.1795133352279663
+total time : 185.2947 s
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>10. seg_loss = BCEDiceLoss, depth_loss = SSIMLoss</strong></p>
+<div class="figure align-default" id="id11">
+<img alt="_images/bcedice_ssim.png" src="_images/bcedice_ssim.png" />
+<p class="caption"><span class="caption-text">bcedice_ssim</span><a class="headerlink" href="#id11" title="Permalink to this image">¶</a></p>
+<div class="legend">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mIOU : 0.4413087069988251
+mRMSE : 0.1304335743188858
+total time : 189.7473 s
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="thejourney.testing_hparams_timings.html" class="btn btn-neutral float-right" title="4. Testing Timings and Hyper Params" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="thejourney.dataset.html" class="btn btn-neutral float-left" title="2. The Dataset" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Satyajit Ghana
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

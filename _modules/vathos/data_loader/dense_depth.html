@@ -1,0 +1,459 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>vathos.data_loader.dense_depth &mdash; ProjektDepth - vathos 🐲 master documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/favicon-16x16.png"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> ProjektDepth - vathos 🐲
+          
+
+          
+            
+            <img src="../../../_static/logo.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../model.html">vathos.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../data_loader.html">vathos.data_loader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../trainer.html">vathos.trainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../runner.html">vathos.runner</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../utils.html">vathos.utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">The Journey</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../thejourney.html">Vathos 🐲 - The Journey</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ProjektDepth - vathos 🐲</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>vathos.data_loader.dense_depth</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for vathos.data_loader.dense_depth</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">Dataset</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="c1"># from tqdm.auto import tqdm</span>
+<span class="kn">from</span> <span class="nn">tqdm.notebook</span> <span class="kn">import</span> <span class="n">tqdm</span><span class="p">,</span> <span class="n">trange</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">import</span> <span class="nn">PIL</span>
+<span class="kn">import</span> <span class="nn">zipfile</span>
+<span class="kn">from</span> <span class="nn">zipfile</span> <span class="kn">import</span> <span class="n">ZipFile</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="DenseDepth"><a class="viewcode-back" href="../../../data_loader.html#vathos.data_loader.DenseDepth">[docs]</a><span class="k">class</span> <span class="nc">DenseDepth</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    DenseDepth Dataset</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        root: the directory where to place the dataset unzipped files</span>
+<span class="sd">        source_zipfiles: the directory where the dataset zip files are stored (mount your drive and give a absolute path)</span>
+<span class="sd">        transform: torchvision transform for input images</span>
+<span class="sd">        target_transform: torchvision transform for ouput images</span>
+
+<span class="sd">    Input is fg_bg image AND bg image</span>
+
+<span class="sd">    Target is fg_bg_mask AND depth_fg_bg image</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">source_zipfiles</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;bg_small.zip&#39;</span><span class="p">,</span> <span class="s1">&#39;fg_bg_small.zip&#39;</span><span class="p">,</span>
+                       <span class="s1">&#39;fg_bg_mask_small.zip&#39;</span><span class="p">,</span> <span class="s1">&#39;depth_fg_bg_small.zip&#39;</span><span class="p">]</span>
+
+    <span class="n">bg_stat</span> <span class="o">=</span> <span class="p">([</span><span class="s1">&#39;0.573435604572296&#39;</span><span class="p">,</span> <span class="s1">&#39;0.520844697952271&#39;</span><span class="p">,</span> <span class="s1">&#39;0.457784473896027&#39;</span><span class="p">],</span> <span class="p">[</span>
+               <span class="s1">&#39;0.207058250904083&#39;</span><span class="p">,</span> <span class="s1">&#39;0.208138316869736&#39;</span><span class="p">,</span> <span class="s1">&#39;0.215291306376457&#39;</span><span class="p">])</span>
+    <span class="n">fg_bg_stat</span> <span class="o">=</span> <span class="p">([</span><span class="s1">&#39;0.568499565124512&#39;</span><span class="p">,</span> <span class="s1">&#39;0.512103974819183&#39;</span><span class="p">,</span> <span class="s1">&#39;0.452332496643066&#39;</span><span class="p">],</span> <span class="p">[</span>
+                  <span class="s1">&#39;0.211068645119667&#39;</span><span class="p">,</span> <span class="s1">&#39;0.211040720343590&#39;</span><span class="p">,</span> <span class="s1">&#39;0.216081097722054&#39;</span><span class="p">])</span>
+    <span class="n">fg_bg_mask_stat</span> <span class="o">=</span> <span class="p">([</span><span class="s1">&#39;0.062296919524670&#39;</span><span class="p">,</span> <span class="s1">&#39;0.062296919524670&#39;</span><span class="p">,</span> <span class="s1">&#39;0.062296919524670&#39;</span><span class="p">],</span> <span class="p">[</span>
+                       <span class="s1">&#39;0.227044790983200&#39;</span><span class="p">,</span> <span class="s1">&#39;0.227044790983200&#39;</span><span class="p">,</span> <span class="s1">&#39;0.227044790983200&#39;</span><span class="p">])</span>
+    <span class="n">depth_fg_bg_stat</span> <span class="o">=</span> <span class="p">([</span><span class="s1">&#39;0.302973538637161&#39;</span><span class="p">,</span> <span class="s1">&#39;0.302973538637161&#39;</span><span class="p">,</span> <span class="s1">&#39;0.302973538637161&#39;</span><span class="p">],</span> <span class="p">[</span>
+                        <span class="s1">&#39;0.101284727454185&#39;</span><span class="p">,</span> <span class="s1">&#39;0.101284727454185&#39;</span><span class="p">,</span> <span class="s1">&#39;0.101284727454185&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">source_zipfolder</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">target_transform</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">root</span><span class="p">)</span> <span class="o">/</span> <span class="s1">&#39;Vathos&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source_zipfolder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">source_zipfolder</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">transform</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_transform</span> <span class="o">=</span> <span class="n">target_transform</span>
+
+        <span class="c1"># check if the dataset exists</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">/</span> <span class="s1">&#39;bg&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">/</span> <span class="s1">&#39;fg_bg&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">/</span> <span class="s1">&#39;fg_bg_mask&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">/</span> <span class="s1">&#39;depth_fg_bg&#39;</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;dataset folders/files already exists in </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># extract the dataset to root dir</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">extractall</span><span class="p">()</span>
+
+        <span class="c1"># pathlib does not order them by default</span>
+        <span class="n">bg_paths</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">/</span> <span class="s1">&#39;bg&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;*.jpg&#39;</span><span class="p">)))</span>
+        <span class="n">fg_bg_paths</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">/</span> <span class="s1">&#39;fg_bg&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;**/*.jpg&#39;</span><span class="p">)))</span>
+        <span class="n">fg_bg_mask_paths</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+            <span class="nb">list</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">/</span> <span class="s1">&#39;fg_bg_mask&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;**/*.jpg&#39;</span><span class="p">)))</span>
+        <span class="n">depth_fg_bg_paths</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+            <span class="nb">list</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">/</span> <span class="s1">&#39;depth_fg_bg&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;**/*.png&#39;</span><span class="p">)))</span>
+
+        <span class="k">assert</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">bg_paths</span><span class="p">)</span> <span class="o">==</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="k">assert</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fg_bg_paths</span><span class="p">)</span> <span class="o">==</span> <span class="mi">400000</span><span class="p">)</span>
+        <span class="k">assert</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fg_bg_mask_paths</span><span class="p">)</span> <span class="o">==</span> <span class="mi">400000</span><span class="p">)</span>
+        <span class="k">assert</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">depth_fg_bg_paths</span><span class="p">)</span> <span class="o">==</span> <span class="mi">400000</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">bg_paths</span><span class="p">)</span><span class="si">}</span><span class="s1"> bg images, </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">fg_bg_paths</span><span class="p">)</span><span class="si">}</span><span class="s1"> fg_bg images, </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">fg_bg_mask_paths</span><span class="p">)</span><span class="si">}</span><span class="s1"> fg_bg_mask images, </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">depth_fg_bg_paths</span><span class="p">)</span><span class="si">}</span><span class="s1"> depth_fg_bg images&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_paths</span> <span class="o">=</span> <span class="n">fg_bg_paths</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bg_paths</span> <span class="o">=</span> <span class="n">bg_paths</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_paths</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">fg_bg_mask_paths</span><span class="p">,</span> <span class="n">depth_fg_bg_paths</span><span class="p">))</span>
+
+<div class="viewcode-block" id="DenseDepth.extractall"><a class="viewcode-back" href="../../../data_loader.html#vathos.data_loader.DenseDepth.extractall">[docs]</a>    <span class="k">def</span> <span class="nf">extractall</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;extracts the zip files into the root dir</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Extracting the zip files&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">smallzip</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source_zipfiles</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Extracting </span><span class="si">{</span><span class="n">smallzip</span><span class="si">}</span><span class="s1"> ...&#39;</span><span class="p">)</span>
+            <span class="n">zipf</span> <span class="o">=</span> <span class="n">ZipFile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source_zipfolder</span> <span class="o">/</span> <span class="n">smallzip</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+            <span class="n">zipf</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+
+        <span class="n">bgidx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_paths</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">stem</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)[</span><span class="mi">3</span><span class="p">]</span>
+
+        <span class="n">bgimg</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bg_paths</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">bgidx</span><span class="p">)])</span>
+        <span class="n">bgimg</span> <span class="o">=</span> <span class="n">bgimg</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">)</span>
+        <span class="c1"># bgimg = np.array(bgimg)</span>
+
+        <span class="n">fg_bgimg</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_paths</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
+        <span class="n">fg_bgimg</span> <span class="o">=</span> <span class="n">fg_bgimg</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">)</span>
+        <span class="c1"># fg_bgimg = np.array(fg_bgimg)</span>
+
+        <span class="n">target_mask</span><span class="p">,</span> <span class="n">target_depth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_paths</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+
+        <span class="n">mask_fg_bgimg</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">target_mask</span><span class="p">)</span>
+        <span class="n">mask_fg_bgimg</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;L&#39;</span><span class="p">)</span>
+        <span class="n">mask_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mask_fg_bgimg</span><span class="p">)</span>
+        <span class="n">mask_arr</span><span class="p">[</span><span class="n">mask_arr</span> <span class="o">&gt;=</span> <span class="mi">150</span><span class="p">]</span> <span class="o">=</span> <span class="mi">255</span>
+        <span class="n">mask_arr</span><span class="p">[</span><span class="n">mask_arr</span> <span class="o">&lt;</span> <span class="mi">150</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">mask_fg_bgimg</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">mask_arr</span><span class="p">)</span>
+        <span class="c1"># mask_fg_bgimg.convert(&#39;L&#39;)</span>
+
+        <span class="n">depth_fg_bgimg</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">target_depth</span><span class="p">)</span>
+        <span class="n">depth_fg_bgimg</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;L&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">bgimg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">bgimg</span><span class="p">)</span>
+            <span class="n">fg_bgimg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">fg_bgimg</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_transform</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">mask_fg_bgimg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_transform</span><span class="p">(</span><span class="n">mask_fg_bgimg</span><span class="p">)</span>
+            <span class="n">depth_fg_bgimg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_transform</span><span class="p">(</span><span class="n">depth_fg_bgimg</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;bg&#39;</span><span class="p">:</span> <span class="n">bgimg</span><span class="p">,</span> <span class="s1">&#39;fg_bg&#39;</span><span class="p">:</span> <span class="n">fg_bgimg</span><span class="p">,</span> <span class="s1">&#39;fg_bg_mask&#39;</span><span class="p">:</span> <span class="n">mask_fg_bgimg</span><span class="p">,</span> <span class="s1">&#39;depth_fg_bg&#39;</span><span class="p">:</span> <span class="n">depth_fg_bgimg</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_paths</span><span class="p">)</span>
+
+<div class="viewcode-block" id="DenseDepth.plot_sample"><a class="viewcode-back" href="../../../data_loader.html#vathos.data_loader.DenseDepth.plot_sample">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">plot_sample</span><span class="p">(</span><span class="n">sample</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Plots a given sample of the dataset</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            batch: the batch of data of this DenseDepth dataset</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            matplotlib.pyplot.figure: the created figure</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">bg</span><span class="p">,</span> <span class="n">fg_bg</span><span class="p">,</span> <span class="n">fg_bg_mask</span><span class="p">,</span> <span class="n">depth_fg_bg</span> <span class="o">=</span> <span class="n">sample</span><span class="p">[</span><span class="s1">&#39;bg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">sample</span><span class="p">[</span><span class="s1">&#39;fg_bg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span>
+            <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">sample</span><span class="p">[</span><span class="s1">&#39;fg_bg_mask&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">sample</span><span class="p">[</span><span class="s1">&#39;depth_fg_bg&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">bg</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">fg_bg</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+        <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">fg_bg_mask</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+        <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">depth_fg_bg</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+        <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">fig</span></div>
+
+<div class="viewcode-block" id="DenseDepth.plot4_batch"><a class="viewcode-back" href="../../../data_loader.html#vathos.data_loader.DenseDepth.plot4_batch">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">plot4_batch</span><span class="p">(</span><span class="n">batch</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Plots 4 images for batch</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            batch: the batch of data of this DenseDepth dataset</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            matplotlib.pyplot.figure: the created figure</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># set the title</span>
+        <span class="k">for</span> <span class="n">axs</span><span class="p">,</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;BG&#39;</span><span class="p">,</span> <span class="s1">&#39;FG_BG&#39;</span><span class="p">,</span> <span class="s1">&#39;FG_BG_MASK&#39;</span><span class="p">,</span> <span class="s1">&#39;DEPTH_FG_BG&#39;</span><span class="p">]):</span>
+            <span class="n">axs</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+
+        <span class="c1"># plot the first 4 samples from the batch</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+            <span class="n">bg</span><span class="p">,</span> <span class="n">fg_bg</span><span class="p">,</span> <span class="n">fg_bg_mask</span><span class="p">,</span> <span class="n">depth_fg_bg</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="s1">&#39;bg&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">batch</span><span class="p">[</span><span class="s1">&#39;fg_bg&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span>
+                <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">batch</span><span class="p">[</span><span class="s1">&#39;fg_bg_mask&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">batch</span><span class="p">[</span><span class="s1">&#39;depth_fg_bg&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+            <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">bg</span><span class="p">)</span>
+            <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+            <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">fg_bg</span><span class="p">)</span>
+            <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+            <span class="n">fg_bg_mask</span><span class="p">[</span><span class="n">fg_bg_mask</span> <span class="o">&gt;=</span> <span class="mf">0.9</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">fg_bg_mask</span><span class="p">[</span><span class="n">fg_bg_mask</span> <span class="o">&lt;</span> <span class="mf">0.9</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">fg_bg_mask</span><span class="p">)</span>
+            <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+            <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">depth_fg_bg</span><span class="p">)</span>
+            <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+        <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">fig</span></div>
+
+<div class="viewcode-block" id="DenseDepth.plot_results"><a class="viewcode-back" href="../../../data_loader.html#vathos.data_loader.DenseDepth.plot_results">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">plot_results</span><span class="p">(</span><span class="n">batch</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Plots 8 images for batch&#39;s model results</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            batch: the batch of data of this DenseDepth dataset</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            matplotlib.pyplot.figure: the created figure</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span>
+            <span class="mi">15</span><span class="p">,</span> <span class="mi">18</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># set the title</span>
+        <span class="k">for</span> <span class="n">axs</span><span class="p">,</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;BG&#39;</span><span class="p">,</span> <span class="s1">&#39;FG_BG&#39;</span><span class="p">,</span> <span class="s1">&#39;GT MASK&#39;</span><span class="p">,</span> <span class="s1">&#39;PRED MASK&#39;</span><span class="p">,</span> <span class="s1">&#39;GT DEPTH&#39;</span><span class="p">,</span> <span class="s1">&#39;PRED DEPTH&#39;</span><span class="p">]):</span>
+            <span class="n">axs</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+
+        <span class="c1"># plot the first 8 samples from the batch</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+            <span class="n">bg</span><span class="p">,</span> <span class="n">fg_bg</span><span class="p">,</span> <span class="n">fg_bg_mask</span><span class="p">,</span> <span class="n">depth_fg_bg</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="s1">&#39;bg&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">batch</span><span class="p">[</span><span class="s1">&#39;fg_bg&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span>
+                <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">batch</span><span class="p">[</span><span class="s1">&#39;fg_bg_mask&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">batch</span><span class="p">[</span><span class="s1">&#39;depth_fg_bg&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+            <span class="n">pred_mask</span><span class="p">,</span> <span class="n">pred_depth</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="s1">&#39;pred_mask&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">cpu</span><span class="p">(</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">batch</span><span class="p">[</span><span class="s1">&#39;pred_depth&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+            <span class="n">pred_mask</span><span class="p">[</span><span class="n">pred_mask</span> <span class="o">&gt;=</span> <span class="mf">0.9</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">pred_mask</span><span class="p">[</span><span class="n">pred_mask</span> <span class="o">&lt;</span> <span class="mf">0.9</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">bg</span><span class="p">)</span>
+            <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+            <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">fg_bg</span><span class="p">)</span>
+            <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+            <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">fg_bg_mask</span><span class="p">)</span>
+            <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+            <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">pred_mask</span><span class="p">)</span>
+            <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+            <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">depth_fg_bg</span><span class="p">)</span>
+            <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+            <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">pred_depth</span><span class="p">)</span>
+            <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+        <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">fig</span></div>
+
+<div class="viewcode-block" id="DenseDepth.apply_on_batch"><a class="viewcode-back" href="../../../data_loader.html#vathos.data_loader.DenseDepth.apply_on_batch">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">apply_on_batch</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">apply_func</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;applies a given function the batch</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            batch: a batch of data</span>
+<span class="sd">            apply_func: a function that is to be applied to each data in batch</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">batch</span><span class="p">[</span><span class="s1">&#39;bg&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">apply_func</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="s1">&#39;bg&#39;</span><span class="p">])</span>
+        <span class="n">batch</span><span class="p">[</span><span class="s1">&#39;fg_bg&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">apply_func</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="s1">&#39;fg_bg&#39;</span><span class="p">])</span>
+        <span class="n">batch</span><span class="p">[</span><span class="s1">&#39;fg_bg_mask&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">apply_func</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="s1">&#39;fg_bg_mask&#39;</span><span class="p">])</span>
+        <span class="n">batch</span><span class="p">[</span><span class="s1">&#39;depth_fg_bg&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">apply_func</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="s1">&#39;depth_fg_bg&#39;</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">batch</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Satyajit Ghana
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
