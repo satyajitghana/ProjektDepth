@@ -1,6 +1,9 @@
 6. Training on Small Dataset
 ============================
 
+Github Link : `<https://github.com/satyajitghana/ProjektDepth/blob/master/notebooks/13_DepthModel_TrainOnSmallDataset.ipynb>`_
+Colab Link  : `<https://colab.research.google.com/github/satyajitghana/ProjektDepth/blob/master/notebooks/13_DepthModel_TrainOnSmallDataset.ipynb>`_
+
 Now the model was trained on ``96x96`` images, so then later we can perform transfer learning to train on ``192x192`` images
 
 LR Range Test

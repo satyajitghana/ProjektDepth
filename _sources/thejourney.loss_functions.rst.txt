@@ -1,6 +1,10 @@
 3. Loss Functions
 =================
 
+GitHub Link : `<https://github.com/satyajitghana/ProjektDepth/blob/master/notebooks/11_DepthModel_ModelTrain_PlayWithLossFunctions.ipynb>`_
+Colab Link  : `<https://colab.research.google.com/github/satyajitghana/ProjektDepth/blob/master/notebooks/11_DepthModel_ModelTrain_PlayWithLossFunctions.ipynb>`_
+
+
 Segmentation Loss Functions:
 
 - BCEWithLogits

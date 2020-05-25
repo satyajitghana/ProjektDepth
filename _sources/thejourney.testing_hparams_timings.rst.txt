@@ -1,6 +1,9 @@
 4. Testing Timings and Hyper Params
 ===================================
 
+GitHub Link : `<https://github.com/satyajitghana/ProjektDepth/blob/master/notebooks/08_DepthModel_Experiments_Timings.ipynb>`_
+Colab Link  : `<https://colab.research.google.com/github/satyajitghana/ProjektDepth/blob/master/notebooks/08_DepthModel_Experiments_Timings.ipynb>`_
+
 GPU: Tesla P100
 
 Playing with batch_size
