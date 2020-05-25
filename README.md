@@ -28,6 +28,19 @@ Github: https://github.com/satyajitghana/ProjektDepth
 
 https://projektdepth.readthedocs.io/en/latest/
 
+# Status
+
+![Read the Docs](https://img.shields.io/readthedocs/projektdepth)
+![Website](https://img.shields.io/website?down_message=https%3A%2F%2Fprojektdepth.readthedocs.io%2Fen%2Flatest%2F&up_message=https%3A%2F%2Fprojektdepth.readthedocs.io%2Fen%2Flatest%2F&url=https%3A%2F%2Fprojektdepth.readthedocs.io%2Fen%2Flatest%2F)
+![GitHub top language](https://img.shields.io/github/languages/top/satyajitghana/ProjektDepth)
+![GitHub language count](https://img.shields.io/github/languages/count/satyajitghana/ProjektDepth)
+![GitHub](https://img.shields.io/github/license/satyajitghana/ProjektDepth)
+![GitHub contributors](https://img.shields.io/github/contributors/satyajitghana/ProjektDepth)
+![GitHub repo size](https://img.shields.io/github/repo-size/satyajitghana/ProjektDepth)
+![maintainer](https://img.shields.io/badge/maintainer-shadowleaf-blue)
+![GitHub stars](https://img.shields.io/github/stars/satyajitghana/ProjektDepth?style=social)
+
+
 # Config File
 
 ```yaml
@@ -99,7 +112,7 @@ runner.start_train()
 
 # Architecture
 
-![arch](documentation/ResUNet-V3-transparent.png)
+![arch](docs/source/assets/ResUNet-V3-transparent.png)
 
 ---
 
