@@ -1,6 +1,9 @@
 1. The Model
 ============
 
+GitHub Link : `<https://github.com/satyajitghana/ProjektDepth/blob/master/notebooks/10_DepthModel_ModelImprovisation.ipynb>`_
+Colab Link  : `<https://colab.research.google.com/github/satyajitghana/ProjektDepth/blob/master/notebooks/10_DepthModel_ModelImprovisation.ipynb>`_
+
 Given the task to do monocular depth estimation and also segmentation, we researched
 upon a few possibilities
 

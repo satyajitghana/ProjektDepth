@@ -25,6 +25,9 @@ ProjektDepth - Vathos 🐲 documentation
     Github: https://github.com/satyajitghana/ProjektDepth
 
 
+You must me curious what this is eh ? See The Journey to know how this project was made
+
+
 .. toctree::
    :maxdepth: 2
    :caption: Get Started

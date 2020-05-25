@@ -24,6 +24,10 @@ Github: https://github.com/satyajitghana/ProjektDepth
 [ 2020-05-23 20:55:28,682 - vathos.vathos.runner.runner ] INFO: Now simply setup_train and then start_train your model
 ```
 
+# Documentation 📚
+
+https://projektdepth.readthedocs.io/en/latest/
+
 # Config File
 
 ```yaml
