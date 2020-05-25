@@ -54,9 +54,9 @@ exclude_patterns = ['dataset', 'documentation']
 #
 # source_suffix = ['.rst', '.md']
 
-source_parsers = {
-    '.md': CommonMarkParser,
-}
+# source_parsers = {
+#     '.md': CommonMarkParser,
+# }
 
 source_suffix = ['.rst', '.md', '.ipynb']
 
@@ -76,6 +76,9 @@ add_module_names = False
 #
 html_theme = 'sphinx_rtd_theme'
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+
+html_logo = '_static/img/logo.svg'
+html_favicon = '_static/img/favicon-16x16.png'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -145,4 +148,3 @@ def patched_make_field(self, types, domain, items, **kw):
 
 
 TypedField.make_field = patched_make_field
-
