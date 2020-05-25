@@ -1,8 +1,32 @@
-tqdm
-numpy
-torch
-torchvision
-torchsummary
+# core dependencies
+pytorch>=1.5.0
 albumentations
 kornia
+numpy
+
+# utils
+torchvision>=0.6.0
+tqdm
+ipython
+jupyter
+matplotlib
+torchsummary
 torch_lr_finder
+
+# test
+pytest>=5.1.2
+pytest-flake8
+pytest-cov
+pytest-mypy
+autopep8
+pydocstyle
+
+# docs
+sphinx
+sphinx-gallery
+sphinx_rtd_theme
+sphinxcontrib-bibtex
+nbsphinx
+nbconvert
+notebook
+
