@@ -20,20 +20,24 @@ Various Papers were surveyed to find that UNet with Residual connections work be
 to form a new network.
 
 1. Stacked U-Nets: A No-Frills Approach to Natural Image Segmentation: `<https://arxiv.org/pdf/1804.10343.pdf>`_
-:This inspired me to stack the decoder part of my network to give two outputs
+: This inspired me to stack the decoder part of my network to give two outputs
 
 2. Depth Estimation and Semantic Segmentation from a Single RGB Image Using a Hybrid Convolutional Neural Network: `<https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6514714/>`_
-:Various loss functions were inspired from this
+: Various loss functions were inspired from this
 
 3. Road Extraction by Deep Residual U-Net `<https://arxiv.org/abs/1711.10684>`_
-:I referred this to create the ResUNet
+: I referred this to create the ResUNet
 
 4. Transfer Learning for Brain Tumor Segmentation `<https://arxiv.org/abs/1912.12452>`_
 : Brain Tumor Segmentation done using UNet
 
+5. Image Super-Resolution Using Deep Convolutional Networks `<https://arxiv.org/pdf/1501.00092>`_
+: For the Decoder Network to prevent checkerboard issues, PixelShuffle was used
+
 So we went with that combined with my knowledge that residual networks have proved to be really
 good, and for segmentation a UNet kind of architecture is good, finally we created a custom Residual-UNet
-architecture, with Single Encoder - Double Decoder and Residual Connections between them
+architecture, with Single Encoder - Double Decoder and Residual Connections between them, the model diagram will
+make it more clear to understand how these residual connections between the decoders and the encoder play out.
 
 The model was made over 3 iterations, in which various configurations were tried, but the model was too densly connected
 since we had used `concatenation` to add the residual connections, which created a huge backprop size, that couldn't fit into
