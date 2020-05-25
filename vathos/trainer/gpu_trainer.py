@@ -17,6 +17,12 @@ logger = setup_logger(__name__)
 class GPUTrainer(BaseTrainer):
     r'''
     GPUTrainer: Trains the vathos model on GPU
+
+    see :class:`~vathos.trainer.BaseTrainer` for args
+
+    Examples:
+        >>> gpu_trainer = GPUTrainer(model, loss_fns, optimizer, cfg, train_subset, test_subset, state_dict=state_dict)
+        >>> gpu_trainer.start_train()
     '''
 
     def __init__(self, *args, **kwargs):
@@ -36,7 +42,14 @@ class GPUTrainer(BaseTrainer):
         scheduler_to(self.lr_scheduler, self.device)
 
     def train_epoch(self, epoch):
+        r"""trains the model for one epoch
 
+        Args:
+            epoch: the epoch number
+
+        Returns:
+            Dict: miou, mrmse, seg_loss, depth_loss
+        """
         logger.info(f'=> Training Epoch {epoch}')
 
         # clear the cache before training this epoch
@@ -111,6 +124,14 @@ class GPUTrainer(BaseTrainer):
         return {'miou': miou, 'mrmse': mrmse, 'seg_loss': seg_loss, 'depth_loss': depth_loss}
 
     def test_epoch(self, epoch):
+        r"""tests the model for one epoch
+
+        Args:
+            epoch: the epoch number
+
+        Returns:
+            Dict: miou, mrmse, seg_loss, depth_loss
+        """
         logger.info(f'=> Testing Epoch {epoch}')
 
         # clear the cache before testing this epoch
@@ -120,11 +141,14 @@ class GPUTrainer(BaseTrainer):
         # set the model in eval mode
         self.model.eval()
 
+        # metrics and losses
         miou = 0
         mrmse = 0
         seg_loss = 0
         depth_loss = 0
 
+        # tqdm writes a lot of data into a single cell in colab that caushes high local browser
+        # ram uses, so chuck tqdm, find some alternative ?
         # pbar = tqdm(self.test_loader, dynamic_ncols=True)
         pbar = self.test_loader
 
@@ -162,6 +186,12 @@ class GPUTrainer(BaseTrainer):
         return {'miou': miou, 'mrmse': mrmse, 'seg_loss': seg_loss, 'depth_loss': depth_loss, 'results': results}
 
     def start_train(self):
+        r"""trains the model for self.epochs times
+
+        the model and training state is saved at every epoch
+
+        summary is flushed to disk every epoch
+        """
         logger.info('=> Training Started')
         logger.info(f'Training the model for {self.epochs} epochs')
 
@@ -176,6 +206,7 @@ class GPUTrainer(BaseTrainer):
             # train this epoch
             train_metric = self.train_epoch(epoch)
 
+            # train metrics
             self.writer.add_scalar(
                 'EpochLoss/Train/seg_loss', train_metric['seg_loss'], epoch)
             self.writer.add_scalar(
@@ -188,6 +219,7 @@ class GPUTrainer(BaseTrainer):
             # test this epoch
             test_metric = self.test_epoch(epoch)
 
+            # test metrics
             self.writer.add_scalar(
                 'EpochLoss/Test/seg_loss', test_metric['seg_loss'], epoch)
             self.writer.add_scalar(
@@ -202,6 +234,9 @@ class GPUTrainer(BaseTrainer):
 
             self.writer.add_figure(
                 'ModelImages/TestImages', test_images, epoch)
+
+            # make sure to flush the data to the `SummaryWriter` file
+            self.writer.flush()
 
             # check if we improved accuracy and save the model
             if (test_metric['mrmse'] <= self.best_accuracy['mrmse']) or (test_metric['miou'] >= self.best_accuracy['miou']):
@@ -242,5 +277,3 @@ class GPUTrainer(BaseTrainer):
                 'save_epoch': epoch,
                 'total_epochs': self.epochs
             }, train_checkpoint)
-
-            self.writer.flush()

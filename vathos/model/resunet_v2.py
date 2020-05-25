@@ -1,8 +1,16 @@
 import torch
 import torch.nn as nn
 
+
 class ResDoubleConv(nn.Module):
-    '''Basic DoubleConv of a ResNetV2'''
+    r'''Basic DoubleConv of a ResNetV2
+
+    Performs basic Pre Activated ResNet Double Convolution
+
+    Args:
+        in_channels: input channels
+        out_channels: output channels
+    '''
 
     def __init__(self, in_channels, out_channels):
         super(ResDoubleConv, self).__init__()
@@ -25,7 +33,17 @@ class ResDoubleConv(nn.Module):
 
 
 class ResDownBlock(nn.Module):
-    '''Basic DownBlock of a ResNetV2'''
+    r'''Basic DownBlock of a ResNetV2
+
+    Performs a Residual Down operation
+
+    Args:
+        in_channels: input channels
+        out_channels: output channels
+
+    output: :math:`(N, C, H/2, W/2)`
+
+    '''
 
     def __init__(self, in_channels, out_channels):
         super(ResDownBlock, self).__init__()
@@ -49,17 +67,36 @@ class ResDownBlock(nn.Module):
 
 
 class ResUpBlock(nn.Module):
-    '''Basic UpBlock of a ResNetV2'''
+    r'''Basic UpBlock of a ResNetV2
+
+    Performs Residual Up Convolution on the input, uses PixelShuffle to produce
+    checkerboard-free outputs
+
+    Args:
+        in_channels : input channels
+        out_channels : output channels
+        skip_channels : skip input channels
+        dense_channels: dense input channels (from another decoder)
+
+    .. note::
+        The input is applied with a 1x1 convolution and then pixel shuffle to keep the
+        channels constant and also produce checkerboard-free outputs, the rest is then followed
+        by double convolution
+
+    '''
 
     def __init__(self, in_channels, out_channels, skip_channels, dense_channels=None):
         super(ResUpBlock, self).__init__()
 
-        self.pre_conv = nn.Conv2d(in_channels, in_channels*4, kernel_size=1, bias=False)
+        self.pre_conv = nn.Conv2d(
+            in_channels, in_channels*4, kernel_size=1, bias=False)
 
-        self.skip_conv = nn.Conv2d(skip_channels, in_channels, kernel_size=1, bias=False)
+        self.skip_conv = nn.Conv2d(
+            skip_channels, in_channels, kernel_size=1, bias=False)
 
         if dense_channels is not None:
-            self.dense_conv = nn.Conv2d(dense_channels, in_channels, kernel_size=1, bias=False)
+            self.dense_conv = nn.Conv2d(
+                dense_channels, in_channels, kernel_size=1, bias=False)
 
         self.upsample = nn.PixelShuffle(2)
 
@@ -88,12 +125,16 @@ class ResUpBlock(nn.Module):
 
 
 class ResUNet(nn.Module):
+    r"""A ResNet - Unet inspired custom model for monocular depth estimation
+    """
+
     def __init__(self):
         super(ResUNet, self).__init__()
 
         # Init Conv
         # H ; input = 6, H ; out = 32, H
-        self.init_conv = nn.Conv2d(6, 32, kernel_size=5, stride=1, padding=2, bias=False)
+        self.init_conv = nn.Conv2d(
+            6, 32, kernel_size=5, stride=1, padding=2, bias=False)
 
         # Encoder
         # H / 2   ; in = 32, H      ; out = 64, H/2    ; skip1 = 64, H

@@ -6,7 +6,14 @@ import torch.nn as nn
 
 
 class ResDoubleConv(nn.Module):
-    '''Basic DoubleConv of a ResNeXt'''
+    r'''Basic DoubleConv of a ResNeXt
+
+    Performs basic Pre Activated ResNet Double Convolution
+
+    Args:
+        in_channels: input channels
+        out_channels: output channels
+    '''
 
     def __init__(self, in_channels, out_channels):
         super(ResDoubleConv, self).__init__()
@@ -105,6 +112,9 @@ class ResUpBlock(nn.Module):
 
 
 class ResUNeXt(nn.Module):
+    r"""A ResNeXt - Unet inspired custom model for monocular depth estimation and segmentation
+    """
+
     def __init__(self):
         super(ResUNeXt, self).__init__()
 

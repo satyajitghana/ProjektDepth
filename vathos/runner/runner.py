@@ -16,6 +16,12 @@ logger = setup_logger(__name__)
 
 
 class Runner():
+    r"""Runner that encapsulated a Trainer
+
+    Args:
+        config: a dict that contains the current experiment info
+    """
+
     def __init__(self, config):
         self.config = config
 
@@ -24,6 +30,8 @@ class Runner():
         logger.info('Now simply setup_train and then start_train your model')
 
     def setup_train(self):
+        r"""sets up the training for the config provided
+        """
 
         cfg = self.config
 
@@ -127,6 +135,8 @@ class Runner():
             logger.error(f"Unsupported Device: {cfg['device']}")
 
     def start_train(self):
+        r"""a wrapper that calls self.trainer.start_train()
+        """
         assert(self.trainer is not None)
 
         self.trainer.start_train()

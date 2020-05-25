@@ -1,0 +1,340 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>vathos.runner.runner &mdash; ProjektDepth - vathos 🐲 master documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> ProjektDepth - vathos 🐲
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../model.html">vathos.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../data_loader.html">vathos.data_loader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../trainer.html">vathos.trainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../runner.html">vathos.runner</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../utils.html">vathos.utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">The Journey</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../thejourney.html">Vathos 🐲 - The Journey</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ProjektDepth - vathos 🐲</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>vathos.runner.runner</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for vathos.runner.runner</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">vathos.utils</span> <span class="kn">import</span> <span class="n">setup_logger</span><span class="p">,</span> <span class="n">get_instance_v2</span>
+<span class="kn">import</span> <span class="nn">vathos.model</span> <span class="k">as</span> <span class="nn">vmodel</span>
+<span class="kn">import</span> <span class="nn">vathos.model.loss</span> <span class="k">as</span> <span class="nn">vloss</span>
+<span class="kn">import</span> <span class="nn">vathos.trainer</span> <span class="k">as</span> <span class="nn">vtrainer</span>
+<span class="kn">import</span> <span class="nn">vathos.data_loader</span> <span class="k">as</span> <span class="nn">vdata_loader</span>
+<span class="kn">from</span> <span class="nn">vathos.data_loader.utils</span> <span class="kn">import</span> <span class="n">split_dataset</span>
+<span class="kn">import</span> <span class="nn">vathos.utils</span> <span class="k">as</span> <span class="nn">vutils</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torchvision.transforms</span> <span class="k">as</span> <span class="nn">T</span>
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pformat</span>
+<span class="kn">import</span> <span class="nn">pprint</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">setup_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Runner"><a class="viewcode-back" href="../../../runner.html#vathos.runner.Runner">[docs]</a><span class="k">class</span> <span class="nc">Runner</span><span class="p">():</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Runner that encapsulated a Trainer</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        config: a dict that contains the current experiment info</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span>
+
+        <span class="c1"># print the super awesome logo</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">vutils</span><span class="o">.</span><span class="n">logo</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Now simply setup_train and then start_train your model&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Runner.setup_train"><a class="viewcode-back" href="../../../runner.html#vathos.runner.Runner.setup_train">[docs]</a>    <span class="k">def</span> <span class="nf">setup_train</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;sets up the training for the config provided</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">cfg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Config&#39;</span><span class="p">)</span>
+        <span class="c1"># print the config</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">pprint</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+        <span class="c1"># dataset:</span>
+        <span class="c1">#     name: DenseDepth</span>
+        <span class="c1">#     root: vathos_data</span>
+        <span class="c1">#     zip_dir: &quot;/content/gdrive/My Drive/DepthProject/depth_dataset_zipped/&quot;</span>
+        <span class="c1">#     loader_args:</span>
+        <span class="c1">#         batch_size: 128</span>
+        <span class="c1">#         num_workers: 4</span>
+        <span class="c1">#         shuffle: True</span>
+        <span class="c1">#         pin_memory: True</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">get_instance_v2</span><span class="p">(</span>
+            <span class="n">vdata_loader</span><span class="p">,</span>
+            <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;dataset&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">],</span>
+            <span class="n">root</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;dataset&#39;</span><span class="p">][</span><span class="s1">&#39;root&#39;</span><span class="p">],</span>
+            <span class="n">source_zipfolder</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;dataset&#39;</span><span class="p">][</span><span class="s1">&#39;zip_dir&#39;</span><span class="p">],</span>
+            <span class="n">transform</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">Compose</span><span class="p">([</span><span class="n">T</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">()]),</span>
+            <span class="n">target_transform</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">Compose</span><span class="p">([</span><span class="n">T</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">()])</span>
+        <span class="p">)</span>
+
+        <span class="n">train_subset</span><span class="p">,</span> <span class="n">test_subset</span> <span class="o">=</span> <span class="n">split_dataset</span><span class="p">(</span>
+            <span class="n">dataset</span><span class="p">,</span> <span class="n">div_factor</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;dataset&#39;</span><span class="p">][</span><span class="s1">&#39;div_factor&#39;</span><span class="p">])</span>
+
+        <span class="c1"># check if the train_subset and test_subset indices are present in disk</span>
+        <span class="n">Path</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;chkpt_dir&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">subset_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;chkpt_dir&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="s1">&#39;subset.pt&#39;</span>
+
+        <span class="k">if</span> <span class="n">subset_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="c1"># load the subset state</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;=&gt; Found subset.pt loading indices&#39;</span><span class="p">)</span>
+            <span class="n">subset_state</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">subset_file</span><span class="p">)</span>
+
+            <span class="n">train_subset</span><span class="o">.</span><span class="n">indices</span> <span class="o">=</span> <span class="n">subset_state</span><span class="p">[</span><span class="s1">&#39;train_indices&#39;</span><span class="p">]</span>
+            <span class="n">test_subset</span><span class="o">.</span><span class="n">indices</span> <span class="o">=</span> <span class="n">subset_state</span><span class="p">[</span><span class="s1">&#39;test_indices&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># save the subset dict</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">({</span><span class="s1">&#39;train_indices&#39;</span><span class="p">:</span> <span class="n">train_subset</span><span class="o">.</span><span class="n">indices</span><span class="p">,</span>
+                        <span class="s1">&#39;test_indices&#39;</span><span class="p">:</span> <span class="n">test_subset</span><span class="o">.</span><span class="n">indices</span><span class="p">},</span> <span class="n">subset_file</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;=&gt; Saved subset.pt (train, test indices)&#39;</span><span class="p">)</span>
+
+        <span class="c1"># create the model</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">get_instance_v2</span><span class="p">(</span><span class="n">vmodel</span><span class="p">,</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">])</span>
+
+        <span class="c1"># optimizer:</span>
+        <span class="c1">#     type: AdamW</span>
+        <span class="c1">#     args:</span>
+        <span class="c1">#         lr: 0.01</span>
+        <span class="n">optimizer</span> <span class="o">=</span> <span class="n">get_instance_v2</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="p">,</span> <span class="n">ctor_name</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;optimizer&#39;</span><span class="p">][</span><span class="s1">&#39;type&#39;</span><span class="p">],</span> <span class="n">params</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(</span>
+        <span class="p">),</span> <span class="n">lr</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;optimizer&#39;</span><span class="p">][</span><span class="s1">&#39;args&#39;</span><span class="p">][</span><span class="s1">&#39;lr&#39;</span><span class="p">])</span>
+
+        <span class="c1"># seg_loss: BCEDiceLoss</span>
+        <span class="c1"># depth_loss: RMSELoss</span>
+        <span class="n">seg_loss</span> <span class="o">=</span> <span class="n">get_instance_v2</span><span class="p">(</span><span class="n">vloss</span><span class="p">,</span> <span class="n">ctor_name</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;seg_loss&#39;</span><span class="p">])</span>
+        <span class="n">depth_loss</span> <span class="o">=</span> <span class="n">get_instance_v2</span><span class="p">(</span><span class="n">vloss</span><span class="p">,</span> <span class="n">ctor_name</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;depth_loss&#39;</span><span class="p">])</span>
+
+        <span class="n">loss_fns</span> <span class="o">=</span> <span class="p">(</span><span class="n">seg_loss</span><span class="p">,</span> <span class="n">depth_loss</span><span class="p">)</span>
+
+        <span class="c1"># check if the model init weights are specified</span>
+        <span class="c1"># model_init: &quot;models/model.pt&quot;</span>
+        <span class="n">model_init</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;model_init&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">model_init</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;=&gt; Found Model init weights&#39;</span><span class="p">)</span>
+            <span class="n">model_state_dict</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">model_init</span><span class="p">)</span>
+            <span class="n">model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">model_state_dict</span><span class="p">)</span>
+
+        <span class="c1"># load the last checkpoint</span>
+        <span class="c1"># chkpt_dir: checkpoint</span>
+        <span class="n">model_checkpoint</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;chkpt_dir&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="s1">&#39;model_checkpoint.pt&#39;</span>
+        <span class="n">train_checkpoint</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;chkpt_dir&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="s1">&#39;train_checkpoint.pt&#39;</span>
+
+        <span class="k">if</span> <span class="n">model_checkpoint</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;=&gt; Found model checkpoint&#39;</span><span class="p">)</span>
+            <span class="n">model_state_dict</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">model_checkpoint</span><span class="p">)</span>
+            <span class="n">model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">model_state_dict</span><span class="p">)</span>
+
+        <span class="n">state_dict</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">train_checkpoint</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;=&gt; Found train checkpoint&#39;</span><span class="p">)</span>
+            <span class="n">checkpoint_state</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">train_checkpoint</span><span class="p">)</span>
+
+            <span class="n">optimizer</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">checkpoint_state</span><span class="p">[</span><span class="s1">&#39;optimizer&#39;</span><span class="p">])</span>
+            <span class="n">save_epoch</span> <span class="o">=</span> <span class="n">checkpoint_state</span><span class="p">[</span><span class="s1">&#39;save_epoch&#39;</span><span class="p">]</span>
+            <span class="n">total_epochs</span> <span class="o">=</span> <span class="n">checkpoint_state</span><span class="p">[</span><span class="s1">&#39;total_epochs&#39;</span><span class="p">]</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Start Epoch should be </span><span class="si">{</span><span class="n">save_epoch</span><span class="si">}</span><span class="s1">+1&#39;</span><span class="p">)</span>
+
+            <span class="n">state_dict</span> <span class="o">=</span> <span class="n">checkpoint_state</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;=&gt; No saved checkpoints found&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;device&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;GPU&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span> <span class="o">=</span> <span class="n">get_instance_v2</span><span class="p">(</span>
+                <span class="n">vtrainer</span><span class="p">,</span> <span class="s1">&#39;GPUTrainer&#39;</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">loss_fns</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">train_subset</span><span class="p">,</span> <span class="n">test_subset</span><span class="p">,</span> <span class="n">state_dict</span><span class="o">=</span><span class="n">state_dict</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported Device: </span><span class="si">{</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;device&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Runner.start_train"><a class="viewcode-back" href="../../../runner.html#vathos.runner.Runner.start_train">[docs]</a>    <span class="k">def</span> <span class="nf">start_train</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;a wrapper that calls self.trainer.start_train()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trainer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="o">.</span><span class="n">start_train</span><span class="p">()</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Satyajit Ghana
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

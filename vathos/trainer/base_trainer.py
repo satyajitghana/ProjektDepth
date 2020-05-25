@@ -14,6 +14,12 @@ logger = setup_logger(__name__)
 
 
 def optimizer_to(optim, device):
+    r"""moves the optimizer to device
+
+    Args:
+        optim: the optimizer
+        device: device to which to move to
+    """
     for param in optim.state.values():
         # Not sure there are any global tensors in the state dict
         if isinstance(param, torch.Tensor):
@@ -29,6 +35,12 @@ def optimizer_to(optim, device):
 
 
 def scheduler_to(sched, device):
+    r"""moves the scheduler to device
+
+    Args:
+        sched: the scheduler
+        device: device to which to move to
+    """
     for param in sched.__dict__.values():
         if isinstance(param, torch.Tensor):
             param.data = param.data.to(device)
@@ -37,11 +49,19 @@ def scheduler_to(sched, device):
 
 
 class BaseTrainer(metaclass=abc.ABCMeta):
-    r'''
-    BaseTrainer: An Abstract Meta Class for all trainers (GPU, CPU, TPU)
-    '''
+    r"""BaseTrainer: An Abstract Meta Class for all trainers (GPU, CPU, TPU)
 
-    def __init__(self, model, loss_fns, optimizer, config, train_subset, test_subset, lr_scheduler_state=None, state_dict=None):
+    Args:
+        model: the model to be trained, (can be on cpu/gpu)
+        loss_fns (Tuple): (seg_loss, depth_loss) 
+        optimizer: the optimizer (can be on cpu/gpu)
+        config: config in dict format
+        train_subset(torch.utils.data.Subset): train dataset wrapped in a subset containing the indices
+        test_subset(torch.utils.data.Subset): test dataset wrapped in a subset containing the indices
+        state_dict(Optional): the saved state in a dictionary format
+    """
+
+    def __init__(self, model, loss_fns, optimizer, config, train_subset, test_subset, state_dict=None):
         super(BaseTrainer, self).__init__()
 
         cfg = config

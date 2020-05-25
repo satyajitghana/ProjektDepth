@@ -5,6 +5,9 @@ import os
 
 
 class TPUTrainer(BaseTrainer):
+    r"""TPUTrainer: Trains the vathos model on TPU
+    """
+
     def __init__(self, *args, **kwargs):
 
         super(TPUTrainer, self).__init__(*args, **kwargs)

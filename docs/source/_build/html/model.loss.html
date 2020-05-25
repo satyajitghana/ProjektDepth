@@ -1,0 +1,353 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>vathos.model.loss &mdash; ProjektDepth - vathos 🐲 master documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="vathos.data_loader" href="data_loader.html" />
+    <link rel="prev" title="vathos.model.resunext" href="model.resunext.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ProjektDepth - vathos 🐲
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="model.html">vathos.model</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="model.resunet.html">vathos.model.resunet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model.resunext.html">vathos.model.resunext</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">vathos.model.loss</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#segmentation-loss">Segmentation Loss</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#depth-loss">Depth Loss</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#accuracy-functions">Accuracy Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="data_loader.html">vathos.data_loader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trainer.html">vathos.trainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runner.html">vathos.runner</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">vathos.utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">The Journey</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="thejourney.html">Vathos 🐲 - The Journey</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ProjektDepth - vathos 🐲</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="model.html">vathos.model</a> &raquo;</li>
+        
+      <li>vathos.model.loss</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/model.loss.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="vathos-model-loss">
+<h1>vathos.model.loss<a class="headerlink" href="#vathos-model-loss" title="Permalink to this headline">¶</a></h1>
+<p>The Various Loss Functions that can be used with the model</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>All the loss functions take the Logits as input, internally they will sigmoid the input
+perform their operations and then return the mean error</p>
+</div>
+<div class="section" id="segmentation-loss">
+<h2>Segmentation Loss<a class="headerlink" href="#segmentation-loss" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="vathos.model.loss.DiceLoss">
+<em class="property">class </em><code class="sig-name descname">DiceLoss</code><a class="reference internal" href="_modules/vathos/model/loss/loss.html#DiceLoss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vathos.model.loss.DiceLoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Criterion that computes Sørensen-Dice Coefficient loss.</p>
+<p>According to [1], we compute the Sørensen-Dice Coefficient as follows:</p>
+<div class="math notranslate nohighlight">
+\[\text{Dice}(x, class) = \frac{2 |X| \cap |Y|}{|X| + |Y|}\]</div>
+<p>where:
+- <span class="math notranslate nohighlight">\(X\)</span> expects to be the scores of each class.
+- <span class="math notranslate nohighlight">\(Y\)</span> expects to be the one-hot tensor with the class labels.</p>
+<p>the loss, is finally computed as:</p>
+<div class="math notranslate nohighlight">
+\[\text{loss}(x, class) = 1 - \text{Dice}(x, class)\]</div>
+<p>[1] <a class="reference external" href="https://en.wikipedia.org/wiki/S%C3%B8rensen%E2%80%93Dice_coefficient">https://en.wikipedia.org/wiki/S%C3%B8rensen%E2%80%93Dice_coefficient</a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="vathos.model.loss.BCEDiceLoss">
+<em class="property">class </em><code class="sig-name descname">BCEDiceLoss</code><a class="reference internal" href="_modules/vathos/model/loss/loss.html#BCEDiceLoss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vathos.model.loss.BCEDiceLoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs BCE and Dice Loss and adds them both</p>
+<p>loss = bce_loss + 2 * dice_loss</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="vathos.model.loss.TverskyLoss">
+<em class="property">class </em><code class="sig-name descname">TverskyLoss</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">alpha</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">beta</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vathos/model/loss/loss.html#TverskyLoss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vathos.model.loss.TverskyLoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs Tversky Loss on Logits</p>
+<p>According to [1], we compute the Tversky Coefficient as follows:</p>
+<div class="math notranslate nohighlight">
+\[\text{S}(P, G, \alpha; \beta) =
+  \frac{|PG|}{|PG| + \alpha |P \ G| + \beta |G \ P|}\]</div>
+<dl class="simple">
+<dt>where:</dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(P\)</span> and <span class="math notranslate nohighlight">\(G\)</span> are the predicted and ground truth binary
+labels.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> control the magnitude of the
+penalties for FPs and FNs, respectively.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\alpha = \beta = 0.5\)</span> =&gt; dice coeff</p></li>
+<li><p><span class="math notranslate nohighlight">\(\alpha = \beta = 1\)</span> =&gt; tanimoto coeff</p></li>
+<li><p><span class="math notranslate nohighlight">\(\alpha + \beta = 1\)</span> =&gt; F beta coeff</p></li>
+</ul>
+<dl class="simple">
+<dt>Reference:</dt><dd><p>[1] <a class="reference external" href="https://kornia.readthedocs.io/en/latest/losses.html">https://kornia.readthedocs.io/en/latest/losses.html</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="vathos.model.loss.BCETverskyLoss">
+<em class="property">class </em><code class="sig-name descname">BCETverskyLoss</code><a class="reference internal" href="_modules/vathos/model/loss/loss.html#BCETverskyLoss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vathos.model.loss.BCETverskyLoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs BCE and Tversky Loss and adds them both</p>
+<p>loss = bce_loss + 2 * tversky_loss</p>
+</dd></dl>
+
+</div>
+<div class="section" id="depth-loss">
+<h2>Depth Loss<a class="headerlink" href="#depth-loss" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="vathos.model.loss.RMSELoss">
+<em class="property">class </em><code class="sig-name descname">RMSELoss</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">eps</span><span class="o">=</span><span class="default_value">1e-06</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vathos/model/loss/loss.html#RMSELoss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vathos.model.loss.RMSELoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs RMSE Loss</p>
+<p>we simply sigmoid the input, pass it through <cite>nn.MSELoss</cite> and then do a <cite>torch.sqrt</cite> on it</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="vathos.model.loss.BerHuLoss">
+<em class="property">class </em><code class="sig-name descname">BerHuLoss</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">threshold</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></span> <span class="o">=</span> <span class="default_value">0.2</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vathos/model/loss/loss.html#BerHuLoss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vathos.model.loss.BerHuLoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implementation of the BerHu Loss from [1]</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}B(y, y') = (1/n) * |y' - y| if |y'-y| &lt;= c\\B(y, y') = (1/n) * ( (y'-y)^2 + c^2 ) / 2*c othwerwise\\c = 1/5*max(|y'-y|)\end{aligned}\end{align} \]</div>
+<p>[1] <a class="reference external" href="http://cs231n.stanford.edu/reports/2017/pdfs/203.pdf">http://cs231n.stanford.edu/reports/2017/pdfs/203.pdf</a></p>
+<p>[2] <a class="reference external" href="https://arxiv.org/abs/1207.6868">https://arxiv.org/abs/1207.6868</a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="vathos.model.loss.GradLoss">
+<em class="property">class </em><code class="sig-name descname">GradLoss</code><a class="reference internal" href="_modules/vathos/model/loss/loss.html#GradLoss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vathos.model.loss.GradLoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs Gradient Loss</p>
+<p>The Image XY Gradients are computed for input and target and the mean L1Loss between these
+gradients is returned</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="vathos.model.loss.SSIMLoss">
+<em class="property">class </em><code class="sig-name descname">SSIMLoss</code><a class="reference internal" href="_modules/vathos/model/loss/loss.html#SSIMLoss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vathos.model.loss.SSIMLoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs SSIM Loss</p>
+<p>window sizes uses are 5x5 and 11x11</p>
+<p>we tried adding other window sizes too, but there wasn’t a significant benefit</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>we do ssim loss for various window sizes, add them and return the mean</p>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt id="vathos.model.loss.RMSEwSSIMLoss">
+<em class="property">class </em><code class="sig-name descname">RMSEwSSIMLoss</code><a class="reference internal" href="_modules/vathos/model/loss/loss.html#RMSEwSSIMLoss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vathos.model.loss.RMSEwSSIMLoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs RMSE and SSIM Loss</p>
+<p>loss = <span class="math notranslate nohighlight">\(\sqrt{\text{ssim_loss} + 4\times \text{rmse_loss}}\)</span></p>
+</dd></dl>
+
+</div>
+<div class="section" id="accuracy-functions">
+<h2>Accuracy Functions<a class="headerlink" href="#accuracy-functions" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="vathos.model.loss.iou">
+<code class="sig-name descname">iou</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">outputs</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+d035d05 ))">torch.Tensor</a></span></em>, <em class="sig-param"><span class="n">labels</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+d035d05 ))">torch.Tensor</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vathos/model/loss/loss.html#iou"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vathos.model.loss.iou" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="vathos.model.loss.rmse">
+<code class="sig-name descname">rmse</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">outputs</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+d035d05 ))">torch.Tensor</a></span></em>, <em class="sig-param"><span class="n">labels</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+d035d05 ))">torch.Tensor</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vathos/model/loss/loss.html#rmse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vathos.model.loss.rmse" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="data_loader.html" class="btn btn-neutral float-right" title="vathos.data_loader" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="model.resunext.html" class="btn btn-neutral float-left" title="vathos.model.resunext" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Satyajit Ghana
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

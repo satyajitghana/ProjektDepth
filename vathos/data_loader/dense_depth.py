@@ -24,6 +24,7 @@ class DenseDepth(Dataset):
         target_transform: torchvision transform for ouput images
 
     Input is fg_bg image AND bg image
+
     Target is fg_bg_mask AND depth_fg_bg image
 
     '''
@@ -74,6 +75,8 @@ class DenseDepth(Dataset):
         self.target_paths = list(zip(fg_bg_mask_paths, depth_fg_bg_paths))
 
     def extractall(self):
+        r"""extracts the zip files into the root dir
+        """
         print(f'Extracting the zip files')
         for smallzip in tqdm(self.source_zipfiles):
             print(f'Extracting {smallzip} ...')
@@ -120,9 +123,14 @@ class DenseDepth(Dataset):
 
     @staticmethod
     def plot_sample(sample):
-        '''
-        Plots a given sample of the dataset
-        '''
+        r"""Plots a given sample of the dataset
+
+        Args:
+            batch: the batch of data of this DenseDepth dataset
+
+        Returns:
+            matplotlib.pyplot.figure: the created figure
+        """
         bg, fg_bg, fg_bg_mask, depth_fg_bg = sample['bg'].permute(1, 2, 0).numpy(), sample['fg_bg'].permute(
             1, 2, 0).numpy(), sample['fg_bg_mask'][0].numpy(), sample['depth_fg_bg'][0].numpy()
         fig, ax = plt.subplots(2, 2, figsize=(4, 4), sharex=True, sharey=True)
@@ -145,9 +153,14 @@ class DenseDepth(Dataset):
 
     @staticmethod
     def plot4_batch(batch):
-        '''
-        Plots 4 images for batch
-        '''
+        r"""Plots 4 images for batch
+
+        Args:
+            batch: the batch of data of this DenseDepth dataset
+
+        Returns:
+            matplotlib.pyplot.figure: the created figure
+        """
         fig, ax = plt.subplots(4, 4, figsize=(6, 6), sharex=True, sharey=True)
 
         # set the title
@@ -180,9 +193,14 @@ class DenseDepth(Dataset):
 
     @staticmethod
     def plot_results(batch):
-        '''
-        Plots 8 images for batch's model results
-        '''
+        r"""Plots 8 images for batch's model results
+
+        Args:
+            batch: the batch of data of this DenseDepth dataset
+
+        Returns:
+            matplotlib.pyplot.figure: the created figure
+        """
         fig, ax = plt.subplots(8, 6, figsize=(
             15, 18), sharex=True, sharey=True)
 
@@ -224,6 +242,12 @@ class DenseDepth(Dataset):
 
     @staticmethod
     def apply_on_batch(batch, apply_func):
+        r"""applies a given function the batch
+
+        Args:
+            batch: a batch of data
+            apply_func: a function that is to be applied to each data in batch
+        """
         batch['bg'] = apply_func(batch['bg'])
         batch['fg_bg'] = apply_func(batch['fg_bg'])
         batch['fg_bg_mask'] = apply_func(batch['fg_bg_mask'])

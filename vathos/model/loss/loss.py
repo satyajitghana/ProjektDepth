@@ -5,6 +5,26 @@ import torch.nn.functional as F
 
 
 class DiceLoss(nn.Module):
+    r"""Criterion that computes Sørensen-Dice Coefficient loss.
+
+        According to [1], we compute the Sørensen-Dice Coefficient as follows:
+
+        .. math::
+
+            \text{Dice}(x, class) = \frac{2 |X| \cap |Y|}{|X| + |Y|}
+
+        where:
+        - :math:`X` expects to be the scores of each class.
+        - :math:`Y` expects to be the one-hot tensor with the class labels.
+
+        the loss, is finally computed as:
+
+        .. math::
+
+            \text{loss}(x, class) = 1 - \text{Dice}(x, class)
+
+        [1] https://en.wikipedia.org/wiki/S%C3%B8rensen%E2%80%93Dice_coefficient
+    """
 
     def __init__(self) -> None:
         super(DiceLoss, self).__init__()
@@ -27,6 +47,29 @@ class DiceLoss(nn.Module):
 
 
 class TverskyLoss(nn.Module):
+    r"""Performs Tversky Loss on Logits
+
+    According to [1], we compute the Tversky Coefficient as follows:
+
+    .. math::
+
+        \text{S}(P, G, \alpha; \beta) =
+          \frac{|PG|}{|PG| + \alpha |P \ G| + \beta |G \ P|}
+
+    where:
+       - :math:`P` and :math:`G` are the predicted and ground truth binary
+         labels.
+       - :math:`\alpha` and :math:`\beta` control the magnitude of the
+         penalties for FPs and FNs, respectively.
+
+    Notes:
+       - :math:`\alpha = \beta = 0.5` => dice coeff
+       - :math:`\alpha = \beta = 1` => tanimoto coeff
+       - :math:`\alpha + \beta = 1` => F beta coeff
+
+    Reference:
+        [1] https://kornia.readthedocs.io/en/latest/losses.html
+    """
 
     def __init__(self, alpha: float, beta: float) -> None:
         super(TverskyLoss, self).__init__()
@@ -54,6 +97,11 @@ class TverskyLoss(nn.Module):
 
 
 class BCEDiceLoss(nn.Module):
+    r"""Performs BCE and Dice Loss and adds them both
+
+    loss = bce_loss + 2 * dice_loss
+    """
+
     def __init__(self) -> None:
         super(BCEDiceLoss, self).__init__()
         self.eps = 1e-6
@@ -73,6 +121,11 @@ class BCEDiceLoss(nn.Module):
 
 
 class BCETverskyLoss(nn.Module):
+    r"""Performs BCE and Tversky Loss and adds them both
+
+    loss = bce_loss + 2 * tversky_loss
+    """
+
     def __init__(self) -> None:
         super(BCETverskyLoss, self).__init__()
         self.eps = 1e-6
@@ -95,13 +148,16 @@ class BerHuLoss(nn.Module):
     r'''
     Implementation of the BerHu Loss from [1]
 
-    math:
-        B(y, y') = (1/n) * |y' - y| if |y'-y| <= c
-        B(y, y') = (1/n) * ( (y'-y)^2 + c^2 ) / 2*c othwerwise
+    .. math::
+            B(y, y') = (1/n) * |y' - y| if |y'-y| <= c
 
-        c = 1/5*max(|y'-y|)
+            B(y, y') = (1/n) * ( (y'-y)^2 + c^2 ) / 2*c othwerwise
+
+            c = 1/5*max(|y'-y|)
 
     [1] http://cs231n.stanford.edu/reports/2017/pdfs/203.pdf
+
+    [2] https://arxiv.org/abs/1207.6868
     '''
 
     def __init__(self, threshold: float = 1./5):
@@ -128,6 +184,12 @@ class BerHuLoss(nn.Module):
 
 
 class GradLoss(nn.Module):
+    r"""Performs Gradient Loss
+
+    The Image XY Gradients are computed for input and target and the mean L1Loss between these
+    gradients is returned
+    """
+
     def __init__(self):
         super(GradLoss, self).__init__()
 
@@ -146,6 +208,16 @@ class GradLoss(nn.Module):
 
 
 class SSIMLoss(nn.Module):
+    r"""Performs SSIM Loss
+
+    window sizes uses are 5x5 and 11x11
+
+    we tried adding other window sizes too, but there wasn't a significant benefit
+
+    .. note::
+        we do ssim loss for various window sizes, add them and return the mean
+    """
+
     def __init__(self):
         super(SSIMLoss, self).__init__()
 
@@ -162,8 +234,9 @@ class SSIMLoss(nn.Module):
 
 
 class RMSEwSSIMLoss(nn.Module):
-    '''
-    the loss functions inside take care of sigmoiding the input and taking mean
+    r'''Performs RMSE and SSIM Loss
+
+    loss = :math:`\sqrt{\text{ssim_loss} + 4\times \text{rmse_loss}}`
     '''
 
     def __init__(self):
@@ -204,6 +277,11 @@ def rmse(outputs: torch.Tensor, labels: torch.Tensor):
 
 
 class RMSELoss(nn.Module):
+    r"""Performs RMSE Loss
+
+    we simply sigmoid the input, pass it through `nn.MSELoss` and then do a `torch.sqrt` on it
+    """
+
     def __init__(self, eps=1e-6):
         super().__init__()
         self.mse = nn.MSELoss()
