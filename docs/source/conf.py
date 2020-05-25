@@ -53,7 +53,12 @@ exclude_patterns = ['dataset', 'documentation']
 # You can specify multiple suffix as a list of string:
 #
 # source_suffix = ['.rst', '.md']
-source_suffix = ['.rst', '.ipynb']
+
+source_parsers = {
+    '.md': CommonMarkParser,
+}
+
+source_suffix = ['.rst', '.md', '.ipynb']
 
 # The master toctree document.
 master_doc = 'index'
@@ -141,11 +146,3 @@ def patched_make_field(self, types, domain, items, **kw):
 
 TypedField.make_field = patched_make_field
 
-
-# Support for Markdown
-
-source_parsers = {
-    '.md': CommonMarkParser,
-}
-
-source_suffix = ['.rst', '.md']
