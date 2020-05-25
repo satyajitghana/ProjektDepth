@@ -15,6 +15,9 @@ Quite a tiring experience overall 😪😪
 LR Range Test
 *************
 
+GitHub Link : `<https://github.com/satyajitghana/ProjektDepth/blob/master/notebooks/12_DepthModel_LRRangeTest.ipynb>`_
+Colab Link  : `<https://colab.research.google.com/github/satyajitghana/ProjektDepth/blob/master/notebooks/12_DepthModel_LRRangeTest.ipynb>`_
+
 .. figure:: assets/lr-range-test.png
 
 
