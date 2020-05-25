@@ -9,13 +9,17 @@ Segmentation Loss Functions:
 
 - BCEWithLogits
 - DiceLoss
+- BCEDice
 - TverskyLoss
+- BCETversky
 
 Depth Loss Functions:
 
 - BerHu
 - GradLoss
 - BCEWithLogits
+- RMSE
+- SSIM
 
 
 Various combinations of the above losses were tried with 1/16th of the dataset
