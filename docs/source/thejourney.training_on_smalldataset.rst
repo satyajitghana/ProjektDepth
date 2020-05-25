@@ -105,17 +105,30 @@ Train for 15 Epochs
 Results
 *******
 
-After first epoch
+After 1st epoch
 ^^^^^^^^^^^^^^^^^
 
 .. figure:: assets/smalltrain/step1.png
 
+After 2nd epoch
+^^^^^^^^^^^^^^^^^
+
+.. figure:: assets/smalltrain/step2.png
 
 After 4th epoch
 ^^^^^^^^^^^^^^^
 
 .. figure:: assets/smalltrain/step4.png
 
+After 9th epoch
+^^^^^^^^^^^^^^^
+
+.. figure:: assets/smalltrain/step9.png
+
+After 11th epoch
+^^^^^^^^^^^^^^^^
+
+.. figure:: assets/smalltrain/step11.png
 
 After 15th epoch
 ^^^^^^^^^^^^^^^^
