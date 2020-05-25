@@ -12,6 +12,7 @@ jupyter
 matplotlib
 torchsummary
 torch_lr_finder
+pyyaml
 
 # test
 pytest>=5.1.2
