@@ -1,6 +1,9 @@
 <h1 align="center">ProjektDepth - váthos 🐲</h1>
 
-<img align="center" src="docs/source/_static/img/logo.png" alt="logo">
+
+<div align="center">
+<img src="docs/source/_static/img/logo.png" >
+</div>
 
 ---
 
@@ -115,7 +118,9 @@ runner.start_train()
 
 # Architecture
 
-![arch](docs/source/assets/ResUNet-V3-transparent.png)
+<div align="center">
+<img src="docs/source/assets/ResUNet-V3-transparent.png" >
+</div>
 
 # Build the docs
 
