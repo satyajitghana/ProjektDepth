@@ -1,32 +1,12 @@
 <h1 align="center">ProjektDepth - váthos 🐲</h1>
 
+<img align="center" src="docs/source/_static/img/logo.png" alt="logo">
+
 ---
-
-```
-                                                                     
-                            ___      ,---,                           
-       ,---.              ,--.'|_  ,--.' |                           
-      /__./|              |  | :,' |  |  :       ,---.               
- ,---.;  ; |              :  : ' : :  :  :      '   ,'\   .--.--.    
-/___/ \  | |   ,--.--.  .;__,'  /  :  |  |,--. /   /   | /  /    '   
-\   ;  \ ' |  /       \ |  |   |   |  :  '   |.   ; ,. :|  :  /`./   
- \   \  \: | .--.  .-. |:__,'| :   |  |   /' :'   | |: :|  :  ;_     
-  ;   \  ' .  \__\/: . .  '  : |__ '  :  | | |'   | .; : \  \    `.  
-   \   \   '  ," .--.; |  |  | '.'||  |  ' | :|   :    |  `----.   \ 
-    \   `  ; /  /  ,.  |  ;  :    ;|  :  :_:,' \   \  /  /  /`--'  / 
-     :   \ |;  :   .'   \ |  ,   / |  | ,'      `----'  '--'.     /  
-      '---" |  ,     .-./  ---`-'  `--''                  `--'---'   
-             `--`---'                                                
-                                                                     
-Author: Satyajit Ghana
-Github: https://github.com/satyajitghana/ProjektDepth
-
-[ 2020-05-23 20:55:28,682 - vathos.vathos.runner.runner ] INFO: Now simply setup_train and then start_train your model
-```
 
 # Documentation 📚
 
-https://projektdepth.readthedocs.io/en/latest/
+## https://projektdepth.readthedocs.io/en/latest/
 
 # Status
 
@@ -86,6 +66,29 @@ training:
 ```
 
 ## Sample Run
+
+```
+                                                                     
+                            ___      ,---,                           
+       ,---.              ,--.'|_  ,--.' |                           
+      /__./|              |  | :,' |  |  :       ,---.               
+ ,---.;  ; |              :  : ' : :  :  :      '   ,'\   .--.--.    
+/___/ \  | |   ,--.--.  .;__,'  /  :  |  |,--. /   /   | /  /    '   
+\   ;  \ ' |  /       \ |  |   |   |  :  '   |.   ; ,. :|  :  /`./   
+ \   \  \: | .--.  .-. |:__,'| :   |  |   /' :'   | |: :|  :  ;_     
+  ;   \  ' .  \__\/: . .  '  : |__ '  :  | | |'   | .; : \  \    `.  
+   \   \   '  ," .--.; |  |  | '.'||  |  ' | :|   :    |  `----.   \ 
+    \   `  ; /  /  ,.  |  ;  :    ;|  :  :_:,' \   \  /  /  /`--'  / 
+     :   \ |;  :   .'   \ |  ,   / |  | ,'      `----'  '--'.     /  
+      '---" |  ,     .-./  ---`-'  `--''                  `--'---'   
+             `--`---'                                                
+                                                                     
+Author: Satyajit Ghana
+Github: https://github.com/satyajitghana/ProjektDepth
+
+[ 2020-05-23 20:55:28,682 - vathos.vathos.runner.runner ] INFO: Now simply setup_train and then start_train your model
+```
+
 
 ```python
 import vathos
