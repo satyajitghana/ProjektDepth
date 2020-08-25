@@ -14,7 +14,7 @@
 # Status
 
 ![Read the Docs](https://img.shields.io/readthedocs/projektdepth)
-![Website](https://img.shields.io/website?down_message=https%3A%2F%2Fprojektdepth.readthedocs.io%2Fen%2Flatest%2F&up_message=https%3A%2F%2Fprojektdepth.readthedocs.io%2Fen%2Flatest%2F&url=https%3A%2F%2Fprojektdepth.readthedocs.io%2Fen%2Flatest%2F)
+[![Website](https://img.shields.io/website?down_message=https%3A%2F%2Fprojektdepth.readthedocs.io%2Fen%2Flatest%2F&up_message=https%3A%2F%2Fprojektdepth.readthedocs.io%2Fen%2Flatest%2F&url=https%3A%2F%2Fprojektdepth.readthedocs.io%2Fen%2Flatest%2F)](https://projektdepth.readthedocs.io/en/latest/)
 ![GitHub top language](https://img.shields.io/github/languages/top/satyajitghana/ProjektDepth)
 ![GitHub language count](https://img.shields.io/github/languages/count/satyajitghana/ProjektDepth)
 ![GitHub](https://img.shields.io/github/license/satyajitghana/ProjektDepth)
