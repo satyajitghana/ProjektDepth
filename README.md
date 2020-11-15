@@ -5,7 +5,13 @@
 <img src="docs/source/_static/img/logo.png" >
 </div>
 
+váthos or βάθος is in Greek which means Depth
+
 ---
+
+A Monocular Depth Estimation and Segmentation Model, using ResNet-Multi-Tail-Encoder-Decoder or Vathos as i like to call it Architecture. See more in the Documentation below
+
+ProjektDepth: A DNN for segmentation and depth estimation. The entire dataset was created from scraping images, augmenting them to finally create a dataset of 1.2B images. The DNN was custom made inspired from Resnet and Unet architecture, various loss functions and their combinations were tried on the model. LRFinder was used to find the best or for the model. The model was trained on Colab with a P100, experiments were done on TPU. The vathos package contains the runner, trainer, model, loss, and the notebooks. Everything is documented and added to readthedocs.
 
 # Documentation 📚
 
