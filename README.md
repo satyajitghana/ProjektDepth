@@ -21,6 +21,7 @@ ProjektDepth: A DNN for segmentation and depth estimation. The entire dataset wa
 
 ![Read the Docs](https://img.shields.io/readthedocs/projektdepth)
 [![Website](https://img.shields.io/website?down_message=https%3A%2F%2Fprojektdepth.readthedocs.io%2Fen%2Flatest%2F&up_message=https%3A%2F%2Fprojektdepth.readthedocs.io%2Fen%2Flatest%2F&url=https%3A%2F%2Fprojektdepth.readthedocs.io%2Fen%2Flatest%2F)](https://projektdepth.readthedocs.io/en/latest/)
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fsatyajitghana%2FProjektDepth&count_bg=%2379C83D&title_bg=%23555555&icon=python.svg&icon_color=%23E7E7E7&title=visitor_count&edge_flat=false)](https://hits.seeyoufarm.com)
 ![GitHub top language](https://img.shields.io/github/languages/top/satyajitghana/ProjektDepth)
 ![GitHub language count](https://img.shields.io/github/languages/count/satyajitghana/ProjektDepth)
 ![GitHub](https://img.shields.io/github/license/satyajitghana/ProjektDepth)
